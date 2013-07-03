@@ -1,0 +1,27 @@
+{
+	"name": "kdyby/doctrine-cache",
+	"type": "library",
+	"description": "Doctrine Cache bridge for Nette Framework",
+	"keywords": ["nette", "kdyby", "doctrine", "cache"],
+	"homepage": "http://kdyby.org",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"authors": [
+		{
+			"name": "Filip Procházka",
+			"homepage": "http://filip-prochazka.com"
+		}
+	],
+	"support": {
+		"email": "filip@prochazka.su",
+		"issues": "https://github.com/kdyby/doctrinecache/issues"
+	},
+	"require": {
+		"nette/nette": "@dev",
+		"doctrine/cache": "@dev"
+	},
+	"autoload": {
+		"psr-0": {
+			"Kdyby\\DoctrineCache\\": "src/"
+		}
+	}
+}
