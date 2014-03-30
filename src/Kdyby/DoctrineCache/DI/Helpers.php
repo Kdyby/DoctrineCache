@@ -39,9 +39,10 @@ class Helpers extends Nette\Object
 	 * @param \Nette\DI\CompilerExtension $extension
 	 * @param string|\stdClass $cache
 	 * @param string $suffix
+	 * @param bool $debug
 	 * @return string
 	 */
-	public static function processCache(Nette\DI\CompilerExtension $extension, $cache, $suffix)
+	public static function processCache(Nette\DI\CompilerExtension $extension, $cache, $suffix, $debug = NULL)
 	{
 		$builder = $extension->getContainerBuilder();
 
@@ -54,7 +55,7 @@ class Helpers extends Nette\Object
 		}
 
 		if ($impl === 'default') {
-			$cache->arguments[1] = 'Doctrine.' . $suffix;
+			$cache->arguments[1] = 'Doctrine.' . ucfirst($suffix);
 		}
 
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
@@ -64,7 +65,11 @@ class Helpers extends Nette\Object
 			->setInject(FALSE);
 
 		if ($impl === 'default') {
-			$def->factory->arguments[2] = $builder->parameters[$extension->prefix('debug')];
+			if ($debug === NULL) {
+				$debug = $builder->parameters['debugMode'];
+			}
+
+			$def->factory->arguments[2] = $debug;
 		}
 
 		return '@' . $serviceName;
