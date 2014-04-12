@@ -36,11 +36,6 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 	private $cache;
 
 	/**
-	 * @var string The namespace to prefix all cache ids with
-	 */
-	private $namespace;
-
-	/**
 	 * @var bool
 	 */
 	private $debug = FALSE;
@@ -61,79 +56,12 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 	/**
-	 * Set the namespace to prefix all cache ids with.
-	 *
-	 * @param string $namespace
-	 * @return void
-	 */
-	public function setNamespace($namespace)
-	{
-		$this->namespace = (string) $namespace;
-		parent::setNamespace($namespace);
-	}
-
-
-
-	/**
-	 * Prefix the passed id with the configured namespace value
-	 *
-	 * @param string $id  The id to namespace
-	 * @return string $id The namespaced id
-	 */
-	private function getNamespacedId($id)
-	{
-		if (!$this->namespace || strpos($id, $this->namespace) === 0) {
-			return $id;
-		}
-
-		return $this->namespace . $id;
-	}
-
-
-
-	/**
-	 * @return \Nette\Caching\Cache
-	 */
-	private function getCache()
-	{
-		$this->cache->release();
-
-		return $this->cache;
-	}
-
-
-
-	/**
-	 * @param $id
-	 * @param $data
-	 * @param array $files
-	 * @param int $lifeTime
-	 * @return bool
-	 */
-	public function saveDependingOnFiles($id, $data, array $files, $lifeTime = 0)
-	{
-		return $this->doSaveDependingOnFiles($this->getNamespacedId($id), $data, $files, $lifeTime);
-	}
-
-
-
-	/**
-	 * @return array
-	 */
-	public function getIds()
-	{
-		return array();
-	}
-
-
-
-	/**
 	 * @param $id
 	 * @return bool
 	 */
 	protected function doFetch($id)
 	{
-		return $this->getCache()->load($id) ? : FALSE;
+		return $this->cache->load($id) ? : FALSE;
 	}
 
 
@@ -144,7 +72,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 	 */
 	protected function doContains($id)
 	{
-		return $this->getCache()->load($id) !== NULL;
+		return $this->cache->load($id) !== NULL;
 	}
 
 
@@ -196,7 +124,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 			$dp[NCache::EXPIRE] = time() + $lifeTime;
 		}
 
-		$this->getCache()->save($id, $data, $dp);
+		$this->cache->save($id, $data, $dp);
 
 		return TRUE;
 	}
@@ -209,7 +137,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 	 */
 	protected function doDelete($id)
 	{
-		$this->getCache()->save($id, NULL);
+		$this->cache->save($id, NULL);
 
 		return TRUE;
 	}
@@ -218,7 +146,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 	protected function doFlush()
 	{
-		$this->getCache()->clean(array(
+		$this->cache->clean(array(
 			NCache::TAGS => array('doctrine')
 		));
 	}
@@ -230,7 +158,13 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 	 */
 	protected function doGetStats()
 	{
-		return NULL;
+		return array(
+			self::STATS_HITS => NULL,
+			self::STATS_MISSES => NULL,
+			self::STATS_UPTIME => NULL,
+			self::STATS_MEMORY_USAGE => NULL,
+			self::STATS_MEMORY_AVAILABLE => NULL,
+		);
 	}
 
 }
