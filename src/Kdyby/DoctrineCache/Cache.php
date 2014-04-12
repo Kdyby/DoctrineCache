@@ -128,18 +128,6 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 	/**
-	 * Delete all cache entries.
-	 *
-	 * @return array $deleted  Array of the deleted cache ids
-	 */
-	public function deleteAll()
-	{
-		$this->getCache()->clean(array(NCache::TAGS => array('doctrine')));
-	}
-
-
-
-	/**
 	 * @param $id
 	 * @return bool
 	 */
