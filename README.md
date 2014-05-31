@@ -3,7 +3,7 @@ Kdyby/DoctrineCache
 
 [![Build Status](https://travis-ci.org/Kdyby/DoctrineCache.svg?branch=master)](https://travis-ci.org/Kdyby/DoctrineCache)
 [![Downloads this Month](https://img.shields.io/packagist/dm/Kdyby/DoctrineCache.svg)](https://packagist.org/packages/Kdyby/DoctrineCache)
-[![Latest stable](img.shields.io/packagist/v/Kdyby/DoctrineCache.svg)](https://packagist.org/packages/Kdyby/DoctrineCache)
+[![Latest stable](https://img.shields.io/packagist/v/Kdyby/DoctrineCache.svg)](https://packagist.org/packages/Kdyby/DoctrineCache)
 
 
 Requirements
