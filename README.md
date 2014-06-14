@@ -28,7 +28,7 @@ $ composer require kdyby/doctrine-cache:~2.2
 Documentation
 ------------
 
-Lear more in the [documentation](https://github.com/Kdyby/DoctrineCache/blob/master/docs/en/index.md).
+Learn more in the [documentation](https://github.com/Kdyby/DoctrineCache/blob/master/docs/en/index.md).
 
 
 -----
