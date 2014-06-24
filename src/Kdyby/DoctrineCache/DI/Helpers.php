@@ -83,6 +83,10 @@ class Helpers extends Nette\Object
 	 */
 	public static function filterArgs($statement)
 	{
+		if ($statement instanceof Nette\DI\Statement) {
+			return array($statement); // bc
+		}
+
 		/** @var Nette\DI\Statement[] $statements */
 		$statements = Nette\DI\Compiler::filterArguments(array(is_string($statement) ? new Nette\DI\Statement($statement) : $statement));
 		if (!is_array($statements[0]->arguments)) {
