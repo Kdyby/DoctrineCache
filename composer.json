@@ -45,6 +45,7 @@
 		"latte/latte": "~2.2@dev",
 		"tracy/tracy": "~2.2@dev",
 
+		"nette/tester": "@dev",
 		"jakub-onderka/php-parallel-lint": "~0.6"
 	},
 	"autoload": {
