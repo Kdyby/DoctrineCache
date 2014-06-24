@@ -83,13 +83,30 @@ class Helpers extends Nette\Object
 	 */
 	public static function filterArgs($statement)
 	{
-		/** @var Nette\DI\Statement[] $statements */
-		$statements = Nette\DI\Compiler::filterArguments(array(is_string($statement) ? new Nette\DI\Statement($statement) : $statement));
-		if (!is_array($statements[0]->arguments)) {
-			$statements[0]->arguments = array();
+		return self::doFilterArguments(array(is_string($statement) ? new Nette\DI\Statement($statement) : $statement));
+	}
+
+
+
+	/**
+	 * Removes ... and replaces entities with Statement.
+	 * @return array
+	 */
+	private static function doFilterArguments(array $args)
+	{
+		foreach ($args as $k => $v) {
+			if ($v === '...') {
+				unset($args[$k]);
+
+			} elseif (is_array($v)) {
+				$args[$k] = self::doFilterArguments($v);
+
+			} elseif ($v instanceof \stdClass && isset($v->value, $v->attributes)) {
+				$args[$k] = new Nette\DI\Statement($v->value, self::doFilterArguments($v->attributes));
+			}
 		}
 
-		return $statements;
+		return $args;
 	}
 
 }
