@@ -12,6 +12,7 @@ namespace Kdyby\DoctrineCache\DI;
 
 use Kdyby;
 use Nette;
+use Nette\DI\Statement;
 
 
 
@@ -46,9 +47,9 @@ class Helpers extends Nette\Object
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = $cache instanceof \stdClass ? $cache->value : (string) $cache;
+		$impl = $cache instanceof \stdClass ? $cache->value : ($cache instanceof Statement ? $cache->entity : (string) $cache);
 		list($cache) = self::filterArgs($cache);
-		/** @var Nette\DI\Statement $cache */
+		/** @var Statement $cache */
 
 		if (isset(self::$cacheDriverClasses[$impl])) {
 			$cache->entity = self::$cacheDriverClasses[$impl];
@@ -79,21 +80,39 @@ class Helpers extends Nette\Object
 
 	/**
 	 * @param string|\stdClass $statement
-	 * @return Nette\DI\Statement[]
+	 * @return Statement[]
 	 */
 	public static function filterArgs($statement)
 	{
-		if ($statement instanceof Nette\DI\Statement) {
-			return array($statement); // bc
+		return self::doFilterArguments(array(is_string($statement) ? new Statement($statement) : $statement));
+	}
+
+
+
+	/**
+	 * Removes ... recursively.
+	 * @return array
+	 */
+	private static function doFilterArguments(array $args)
+	{
+		foreach ($args as $k => $v) {
+			if ($v === '...') {
+				unset($args[$k]);
+
+			} elseif (is_array($v)) {
+				$args[$k] = self::doFilterArguments($v);
+
+			} elseif ($v instanceof Statement) {
+				$tmp = self::doFilterArguments(array($v->entity));
+				$args[$k] = new Statement($tmp[0], self::doFilterArguments($v->arguments));
+
+			} elseif ($v instanceof \stdClass && isset($v->value, $v->attributes)) {
+				$tmp = self::doFilterArguments(array($v->value));
+				$args[$k] = new Statement($tmp[0], self::doFilterArguments($v->attributes));
+			}
 		}
 
-		/** @var Nette\DI\Statement[] $statements */
-		$statements = Nette\DI\Compiler::filterArguments(array(is_string($statement) ? new Nette\DI\Statement($statement) : $statement));
-		if (!is_array($statements[0]->arguments)) {
-			$statements[0]->arguments = array();
-		}
-
-		return $statements;
+		return $args;
 	}
 
 }
