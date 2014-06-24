@@ -46,7 +46,7 @@ class Helpers extends Nette\Object
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = $cache instanceof \stdClass ? $cache->value : (string) $cache;
+		$impl = $cache instanceof \stdClass ? $cache->value : ($cache instanceof Nette\DI\Statement ? $cache->entity : (string) $cache);
 		list($cache) = self::filterArgs($cache);
 		/** @var Nette\DI\Statement $cache */
 

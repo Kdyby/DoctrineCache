@@ -55,7 +55,10 @@ class ExtensionTest extends Tester\TestCase
 		$default = $container->getService('sample.cache.array');
 		Assert::true($default instanceof Doctrine\Common\Cache\ArrayCache);
 
-		$default = $container->getService('sample.cache.memcache');
+		$default = $container->getService('sample.cache.memcache.one');
+		Assert::true($default instanceof Kdyby\DoctrineCache\MemcacheCache);
+
+		$default = $container->getService('sample.cache.memcache.two');
 		Assert::true($default instanceof Kdyby\DoctrineCache\MemcacheCache);
 	}
 
@@ -74,7 +77,8 @@ class SampleExtension extends Nette\DI\CompilerExtension
 
 		Kdyby\DoctrineCache\DI\Helpers::processCache($this, 'default', 'default', FALSE);
 		Kdyby\DoctrineCache\DI\Helpers::processCache($this, 'array', 'array', FALSE);
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, new Nette\DI\Statement('memcache', array()), 'memcache', FALSE);
+		Kdyby\DoctrineCache\DI\Helpers::processCache($this, (object) array('value' => 'memcache', 'attributes' => array()), 'memcache.one', FALSE);
+		Kdyby\DoctrineCache\DI\Helpers::processCache($this, new Nette\DI\Statement('memcache'), 'memcache.two', FALSE);
 	}
 
 }
