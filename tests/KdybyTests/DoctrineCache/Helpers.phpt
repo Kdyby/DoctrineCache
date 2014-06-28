@@ -54,6 +54,10 @@ class HelpersTest extends Tester\TestCase
 					(object) array('value' => 'SplFileInfo', 'attributes' => array())
 				))
 			),
+			array( // single attribute does not have to be an array
+				array(new Nette\DI\Statement('SplFileInfo', array(__FILE__))),
+				(object) array('value' => 'SplFileInfo', 'attributes' => __FILE__)
+			),
 		);
 	}
 

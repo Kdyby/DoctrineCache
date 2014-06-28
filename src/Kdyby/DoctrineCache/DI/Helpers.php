@@ -102,7 +102,8 @@ class Helpers extends Nette\Object
 				$args[$k] = self::doFilterArguments($v);
 
 			} elseif ($v instanceof \stdClass && isset($v->value, $v->attributes)) {
-				$args[$k] = new Nette\DI\Statement($v->value, self::doFilterArguments($v->attributes));
+				$tmp = self::doFilterArguments(array($v->value));
+				$args[$k] = new Nette\DI\Statement($tmp[0], self::doFilterArguments(is_array($v->attributes) ? $v->attributes : array($v->attributes)));
 			}
 		}
 
