@@ -51,7 +51,10 @@
 	"autoload": {
 		"psr-0": {
 			"Kdyby\\DoctrineCache\\": "src/"
-		}
+		},
+		"classmap": [
+			"src/Kdyby/DoctrineCache/exceptions.php"
+		]
 	},
 	"extra": {
 		"branch-alias": {
