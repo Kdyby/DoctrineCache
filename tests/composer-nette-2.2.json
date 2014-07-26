@@ -36,10 +36,5 @@
 		"classmap": [
 			"src/Kdyby/DoctrineCache/exceptions.php"
 		]
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.2-dev"
-		}
 	}
 }
