@@ -23,7 +23,7 @@
 	},
 	"require-dev": {
 		"nette/tester": "@dev",
-		"jakub-onderka/php-parallel-lint": "~0.6"
+		"jakub-onderka/php-parallel-lint": "~0.7"
 	},
 	"autoload": {
 		"psr-0": {
@@ -32,10 +32,5 @@
 		"classmap": [
 			"src/Kdyby/DoctrineCache/exceptions.php"
 		]
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.2-dev"
-		}
 	}
 }
