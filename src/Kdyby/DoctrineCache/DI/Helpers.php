@@ -64,6 +64,16 @@ class Helpers extends Nette\Object
 			->setAutowired(FALSE)
 			->setInject(FALSE);
 
+		if (class_exists($cache->entity) && is_subclass_of($cache->entity, 'Doctrine\Common\Cache\CacheProvider')) {
+			$ns = 'Kdyby_' . $serviceName;
+
+			if (preg_match('~^(?P<projectRoot>.+)(?:\\\\|\\/)vendor(?:\\\\|\\/)kdyby(?:\\\\|\\/)doctrine-cache(?:\\\\|\\/).+\\z~i', __DIR__, $m)) {
+				$ns .= '_' . substr(md5($m['projectRoot']), 0, 8);
+			}
+
+			$def->addSetup('setNamespace', array($ns));
+		}
+
 		if ($impl === 'default') {
 			if ($debug === NULL) {
 				$debug = $builder->parameters['debugMode'];
