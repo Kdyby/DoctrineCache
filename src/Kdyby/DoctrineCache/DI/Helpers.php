@@ -61,8 +61,11 @@ class Helpers extends Nette\Object
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
 			->setClass('Doctrine\Common\Cache\Cache')
 			->setFactory($cache->entity, $cache->arguments)
-			->setAutowired(FALSE)
-			->setInject(FALSE);
+			->setAutowired(FALSE);
+
+		if (method_exists($def, 'setInject')) {
+			@$def->setInject(FALSE); // wow, such deprecated, many BC!
+		}
 
 		if (class_exists($cache->entity) && is_subclass_of($cache->entity, 'Doctrine\Common\Cache\CacheProvider')) {
 			$ns = 'Kdyby_' . $serviceName;
