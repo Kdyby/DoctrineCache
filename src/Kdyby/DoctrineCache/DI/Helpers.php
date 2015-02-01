@@ -30,7 +30,7 @@ class Helpers extends Nette\Object
 		'apc' => 'Doctrine\Common\Cache\ApcCache',
 		'array' => 'Doctrine\Common\Cache\ArrayCache',
 		'memcache' => 'Kdyby\DoctrineCache\MemcacheCache',
-		'redis' => 'Doctrine\Common\Cache\RedisCache',
+		'redis' => 'Kdyby\DoctrineCache\RedisCache',
 		'xcache' => 'Doctrine\Common\Cache\XcacheCache',
 	);
 
