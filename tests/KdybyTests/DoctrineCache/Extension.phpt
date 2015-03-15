@@ -34,7 +34,7 @@ class ExtensionTest extends Tester\TestCase
 		$config = new Nette\Configurator();
 		$config->setTempDirectory(TEMP_DIR);
 		$config->addParameters(array('container' => array('class' => 'SystemContainer_' . md5(time()))));
-		$config->addConfig(__DIR__ . '/../nette-reset.neon');
+		$config->addConfig(__DIR__ . '/../nette-reset.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
 
 		$config->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {
 			$compiler->addExtension('sample', new SampleExtension());
