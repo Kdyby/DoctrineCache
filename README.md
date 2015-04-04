@@ -9,7 +9,7 @@ Kdyby/DoctrineCache
 Requirements
 ------------
 
-Kdyby/DoctrineCache requires PHP 5.3.2.
+Kdyby/DoctrineCache requires PHP 5.4.
 
 - [Nette Framework](https://github.com/nette/nette)
 - [Doctrine Cache](https://github.com/doctrine/cache)
@@ -21,7 +21,7 @@ Installation
 The best way to install Kdyby/DoctrineCache is using  [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require kdyby/doctrine-cache:~2.2
+$ composer require kdyby/doctrine-cache
 ```
 
 
