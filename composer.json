@@ -17,8 +17,8 @@
 		"issues": "https://github.com/kdyby/doctrinecache/issues"
 	},
 	"require": {
-		"nette/di": "~2.2@dev",
-		"nette/caching": "~2.2@dev",
+		"nette/di": "~2.3@dev",
+		"nette/caching": "~2.3@dev",
 
 		"doctrine/cache": "~1.4"
 	},
@@ -28,7 +28,7 @@
 		"nette/caching": "~2.3@dev",
 		"nette/component-model": "~2.2@dev",
 		"nette/database": "~2.3@dev",
-		"nette/deprecated": "~2.2@dev",
+		"nette/deprecated": "~2.3@dev",
 		"nette/di": "~2.3@dev",
 		"nette/finder": "~2.3@dev",
 		"nette/forms": "~2.3@dev",
@@ -57,7 +57,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "2.3-dev"
+			"dev-master": "2.4-dev"
 		}
 	}
 }
