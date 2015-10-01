@@ -96,12 +96,13 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 				$files[] = ClassType::from($class)->getFileName();
 			}
 		}
+		if ($data instanceof \Symfony\Component\Validator\Mapping\ClassMetadata) {
+			$files[] = ClassType::from($data->name)->getFileName();
+		}
 
 		if (!empty($data)){
-			if ((is_array($data) && reset($data) instanceof Doctrine\ORM\Mapping\Annotation) || $data instanceof Doctrine\ORM\Mapping\Annotation) {
-				if (($m = Strings::match($id, '~^\[(?P<class>[^@$]+)(?:\$(?P<prop>[^@$]+))?\@\[Annot\]~i')) && class_exists($m['class'])) {
-					$files[] = ClassType::from($m['class'])->getFileName();
-				}
+			if (($m = Strings::match($id, '~(?P<class>[^@$[\].]+)(?:\$(?P<prop>[^@$[\].]+))?\@\[Annot\]~i')) && class_exists($m['class'])) {
+				$files[] = ClassType::from($m['class'])->getFileName();
 			}
 		}
 
