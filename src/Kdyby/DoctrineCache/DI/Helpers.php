@@ -57,6 +57,7 @@ class Helpers extends Nette\Object
 
 		if ($impl === 'default') {
 			$cache->arguments[1] = 'Doctrine.' . ucfirst($suffix);
+			$cache->arguments[2] = $debug !== NULL ? $debug : $builder->parameters['debugMode'];
 		}
 
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
@@ -76,14 +77,6 @@ class Helpers extends Nette\Object
 			}
 
 			$def->addSetup('setNamespace', array($ns));
-		}
-
-		if ($impl === 'default') {
-			if ($debug === NULL) {
-				$debug = $builder->parameters['debugMode'];
-			}
-
-			$def->factory->arguments[2] = $debug;
 		}
 
 		return '@' . $serviceName;
