@@ -29,8 +29,10 @@ class Helpers extends Nette\Object
 		'default' => 'Kdyby\DoctrineCache\Cache',
 		'apc' => 'Doctrine\Common\Cache\ApcCache',
 		'array' => 'Doctrine\Common\Cache\ArrayCache',
+		'filesystem' => 'Doctrine\Common\Cache\FilesystemCache',
 		'memcache' => 'Kdyby\DoctrineCache\MemcacheCache',
 		'redis' => 'Kdyby\DoctrineCache\RedisCache',
+		'void' => 'Doctrine\Common\Cache\VoidCache',
 		'xcache' => 'Doctrine\Common\Cache\XcacheCache',
 	);
 
@@ -58,6 +60,10 @@ class Helpers extends Nette\Object
 		if ($impl === 'default') {
 			$cache->arguments[1] = 'Doctrine.' . ucfirst($suffix);
 			$cache->arguments[2] = $debug !== NULL ? $debug : $builder->parameters['debugMode'];
+		}
+
+		if ($impl === 'filesystem') {
+			$cache->arguments[] = $builder->parameters['tempDir'] . '/cache/Doctrine.' . ucfirst($suffix);
 		}
 
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
