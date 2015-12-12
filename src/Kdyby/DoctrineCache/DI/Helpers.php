@@ -31,6 +31,7 @@ class Helpers extends Nette\Object
 		'array' => 'Doctrine\Common\Cache\ArrayCache',
 		'filesystem' => 'Doctrine\Common\Cache\FilesystemCache',
 		'memcache' => 'Kdyby\DoctrineCache\MemcacheCache',
+		'memcached' => 'Kdyby\DoctrineCache\MemcachedCache',
 		'redis' => 'Kdyby\DoctrineCache\RedisCache',
 		'void' => 'Doctrine\Common\Cache\VoidCache',
 		'xcache' => 'Doctrine\Common\Cache\XcacheCache',
