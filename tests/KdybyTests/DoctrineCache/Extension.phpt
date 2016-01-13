@@ -55,6 +55,7 @@ class ExtensionTest extends Tester\TestCase
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'array', 'array', FALSE);
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'filesystem', 'filesystem', FALSE);
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'void', 'void', FALSE);
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'apc', 'apc', FALSE);
 		}));
 
 		$default = $container->getService('eval.cache.default');
@@ -68,6 +69,25 @@ class ExtensionTest extends Tester\TestCase
 
 		$default = $container->getService('eval.cache.void');
 		Assert::true($default instanceof Doctrine\Common\Cache\VoidCache);
+
+		$default = $container->getService('eval.cache.apc');
+		Assert::true($default instanceof Doctrine\Common\Cache\ApcCache);
+	}
+
+
+
+	public function testFunctionalityApcu()
+	{
+		if (PHP_VERSION_ID < 50500) {
+			Tester\Environment::skip('ApcuCache is not supported on PHP 5.4');
+		}
+
+		$container = $this->createContainer(__FUNCTION__, new EvalExtension(function (EvalExtension $extension) {
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'apcu', 'apcu', FALSE);
+		}));
+
+		$default = $container->getService('eval.cache.apcu');
+		Assert::true($default instanceof Doctrine\Common\Cache\ApcuCache);
 	}
 
 

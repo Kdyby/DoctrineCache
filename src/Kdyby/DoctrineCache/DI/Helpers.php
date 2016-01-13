@@ -28,6 +28,7 @@ class Helpers extends Nette\Object
 	public static $cacheDriverClasses = array(
 		'default' => 'Kdyby\DoctrineCache\Cache',
 		'apc' => 'Doctrine\Common\Cache\ApcCache',
+		'apcu' => 'Doctrine\Common\Cache\ApcuCache',
 		'array' => 'Doctrine\Common\Cache\ArrayCache',
 		'filesystem' => 'Doctrine\Common\Cache\FilesystemCache',
 		'memcache' => 'Kdyby\DoctrineCache\MemcacheCache',
