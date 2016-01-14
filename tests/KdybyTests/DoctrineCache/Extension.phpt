@@ -29,18 +29,18 @@ class ExtensionTest extends Tester\TestCase
 	/**
 	 * @return \SystemContainer|Nette\DI\Container
 	 */
-	public function createContainer(array $extraConfig = array())
+	public function createContainer($function, $extension)
 	{
 		$config = new Nette\Configurator();
 		$config->setTempDirectory(TEMP_DIR);
 		$config->addParameters(array(
-			'container' => array('class' => 'SystemContainer_' . md5(time() . serialize($extraConfig))),
-			'_config' => $extraConfig,
+			'container' => array('class' => 'SystemContainer_' . md5(time()) . '_' . $function),
+			'_method' => $function,
 		));
 		$config->addConfig(__DIR__ . '/../nette-reset.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
 
-		$config->onCompile[] = function ($config, Nette\DI\Compiler $compiler) use ($extraConfig) {
-			$compiler->addConfig($extraConfig);
+		$config->onCompile[] = function ($config, Nette\DI\Compiler $compiler) use ($extension) {
+			$compiler->addExtension('eval', $extension);
 		};
 
 		return $config->createContainer();
@@ -50,22 +50,23 @@ class ExtensionTest extends Tester\TestCase
 
 	public function testFunctionality()
 	{
-		$container = $this->createContainer(array(
-			'extensions' => array(
-				'sample' => 'KdybyTests\Doctrine\SampleExtension',
-			),
-		));
+		$container = $this->createContainer(__FUNCTION__, new EvalExtension(function (EvalExtension $extension) {
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'default', 'default', FALSE);
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'array', 'array', FALSE);
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'filesystem', 'filesystem', FALSE);
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'void', 'void', FALSE);
+		}));
 
-		$default = $container->getService('sample.cache.default');
+		$default = $container->getService('eval.cache.default');
 		Assert::true($default instanceof Kdyby\DoctrineCache\Cache);
 
-		$default = $container->getService('sample.cache.array');
+		$default = $container->getService('eval.cache.array');
 		Assert::true($default instanceof Doctrine\Common\Cache\ArrayCache);
 
-		$default = $container->getService('sample.cache.filesystem');
+		$default = $container->getService('eval.cache.filesystem');
 		Assert::true($default instanceof Doctrine\Common\Cache\FilesystemCache);
 
-		$default = $container->getService('sample.cache.void');
+		$default = $container->getService('eval.cache.void');
 		Assert::true($default instanceof Doctrine\Common\Cache\VoidCache);
 	}
 
@@ -77,50 +78,48 @@ class ExtensionTest extends Tester\TestCase
 			Tester\Environment::skip('The memcache extension is not loaded');
 		}
 
-		$container = $this->createContainer(array(
-			'extensions' => array(
-				'withMemcache' => 'KdybyTests\Doctrine\WithMemcacheExtension',
-			),
-		));
+		$container = $this->createContainer(__FUNCTION__, new EvalExtension(function (EvalExtension $extension) {
+			$builder = $extension->getContainerBuilder();
 
-		$default = $container->getService('withMemcache.cache.memcache.one');
+			$builder->addDefinition($extension->prefix('memcache'))
+				->setClass('Memcache');
+
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, (object) array('value' => 'memcache', 'attributes' => array()), 'memcache.one', FALSE);
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, new Nette\DI\Statement('memcache'), 'memcache.two', FALSE);
+		}));
+
+		$default = $container->getService('eval.cache.memcache.one');
 		Assert::true($default instanceof Kdyby\DoctrineCache\MemcacheCache);
 
-		$default = $container->getService('withMemcache.cache.memcache.two');
+		$default = $container->getService('eval.cache.memcache.two');
 		Assert::true($default instanceof Kdyby\DoctrineCache\MemcacheCache);
 	}
 
 }
 
 
-class SampleExtension extends Nette\DI\CompilerExtension
+
+class EvalExtension extends Nette\DI\CompilerExtension
 {
+
+	/**
+	 * @var callable
+	 */
+	public $loadConfiguration;
+
+
+
+	public function __construct($loadConfiguration)
+	{
+		$this->loadConfiguration = $loadConfiguration;
+	}
+
+
 
 	public function loadConfiguration()
 	{
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, 'default', 'default', FALSE);
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, 'array', 'array', FALSE);
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, 'filesystem', 'filesystem', FALSE);
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, 'void', 'void', FALSE);
+		call_user_func($this->loadConfiguration, $this);
 	}
-
-}
-
-
-class WithMemcacheExtension extends Nette\DI\CompilerExtension
-{
-
-	public function loadConfiguration()
-	{
-		$builder = $this->getContainerBuilder();
-
-		$builder->addDefinition($this->prefix('memcache'))
-			->setClass('Memcache');
-
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, (object) array('value' => 'memcache', 'attributes' => array()), 'memcache.one', FALSE);
-		Kdyby\DoctrineCache\DI\Helpers::processCache($this, new Nette\DI\Statement('memcache'), 'memcache.two', FALSE);
-	}
-
 }
 
 \run(new ExtensionTest());
