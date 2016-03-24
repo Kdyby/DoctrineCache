@@ -61,7 +61,8 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 	 */
 	protected function doFetch($id)
 	{
-		return $this->cache->load($id) ? : FALSE;
+		$cached = $this->cache->load($id);
+		return $cached === NULL ? FALSE : $cached;
 	}
 
 
