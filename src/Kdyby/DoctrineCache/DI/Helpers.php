@@ -25,7 +25,7 @@ class Helpers extends Nette\Object
 	/**
 	 * @var array
 	 */
-	public static $cacheDriverClasses = array(
+	public static $cacheDriverClasses = [
 		'default' => 'Kdyby\DoctrineCache\Cache',
 		'apc' => 'Doctrine\Common\Cache\ApcCache',
 		'apcu' => 'Doctrine\Common\Cache\ApcuCache',
@@ -35,7 +35,7 @@ class Helpers extends Nette\Object
 		'redis' => 'Kdyby\DoctrineCache\RedisCache',
 		'void' => 'Doctrine\Common\Cache\VoidCache',
 		'xcache' => 'Doctrine\Common\Cache\XcacheCache',
-	);
+	];
 
 
 
@@ -83,7 +83,7 @@ class Helpers extends Nette\Object
 				$ns .= '_' . substr(md5($m['projectRoot']), 0, 8);
 			}
 
-			$def->addSetup('setNamespace', array($ns));
+			$def->addSetup('setNamespace', [$ns]);
 		}
 
 		return '@' . $serviceName;
@@ -97,7 +97,7 @@ class Helpers extends Nette\Object
 	 */
 	public static function filterArgs($statement)
 	{
-		return self::doFilterArguments(array(is_string($statement) ? new Statement($statement) : $statement));
+		return self::doFilterArguments([is_string($statement) ? new Statement($statement) : $statement]);
 	}
 
 
@@ -116,12 +116,12 @@ class Helpers extends Nette\Object
 				$args[$k] = self::doFilterArguments($v);
 
 			} elseif ($v instanceof Statement) {
-				$tmp = self::doFilterArguments(array($v->getEntity()));
+				$tmp = self::doFilterArguments([$v->getEntity()]);
 				$args[$k] = new Statement($tmp[0], self::doFilterArguments($v->arguments));
 
 			} elseif ($v instanceof \stdClass && isset($v->value, $v->attributes)) {
-				$tmp = self::doFilterArguments(array($v->value));
-				$args[$k] = new Statement($tmp[0], self::doFilterArguments(is_array($v->attributes) ? $v->attributes : array($v->attributes)));
+				$tmp = self::doFilterArguments([$v->value]);
+				$args[$k] = new Statement($tmp[0], self::doFilterArguments(is_array($v->attributes) ? $v->attributes : [$v->attributes]));
 			}
 		}
 

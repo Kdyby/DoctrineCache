@@ -33,10 +33,10 @@ class ExtensionTest extends Tester\TestCase
 	{
 		$config = new Nette\Configurator();
 		$config->setTempDirectory(TEMP_DIR);
-		$config->addParameters(array(
-			'container' => array('class' => 'SystemContainer_' . md5(time()) . '_' . $function),
+		$config->addParameters([
+			'container' => ['class' => 'SystemContainer_' . md5(time()) . '_' . $function],
 			'_method' => $function,
-		));
+		]);
 		$config->addConfig(__DIR__ . '/../nette-reset.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
 
 		$config->onCompile[] = function ($config, Nette\DI\Compiler $compiler) use ($extension) {
@@ -104,7 +104,7 @@ class ExtensionTest extends Tester\TestCase
 			$builder->addDefinition($extension->prefix('memcache'))
 				->setClass('Memcache');
 
-			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, (object) array('value' => 'memcache', 'attributes' => array()), 'memcache.one', FALSE);
+			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, (object) ['value' => 'memcache', 'attributes' => []], 'memcache.one', FALSE);
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, new Nette\DI\Statement('memcache'), 'memcache.two', FALSE);
 		}));
 
