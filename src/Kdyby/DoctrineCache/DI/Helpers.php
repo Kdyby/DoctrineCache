@@ -50,12 +50,12 @@ class Helpers extends Nette\Object
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = $cache instanceof \stdClass ? $cache->value : ($cache instanceof Statement ? $cache->entity : (string) $cache);
+		$impl = $cache instanceof \stdClass ? $cache->value : ($cache instanceof Statement ? $cache->getEntity() : (string) $cache);
 		list($cache) = self::filterArgs($cache);
 		/** @var Statement $cache */
 
 		if (isset(self::$cacheDriverClasses[$impl])) {
-			$cache->entity = self::$cacheDriverClasses[$impl];
+			$cache->setEntity(self::$cacheDriverClasses[$impl]);
 		}
 
 		if ($impl === 'default') {
@@ -69,14 +69,14 @@ class Helpers extends Nette\Object
 
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
 			->setClass('Doctrine\Common\Cache\Cache')
-			->setFactory($cache->entity, $cache->arguments)
+			->setFactory($cache->getEntity(), $cache->arguments)
 			->setAutowired(FALSE);
 
 		if (method_exists($def, 'setInject')) {
 			@$def->setInject(FALSE); // wow, such deprecated, many BC!
 		}
 
-		if (class_exists($cache->entity) && is_subclass_of($cache->entity, 'Doctrine\Common\Cache\CacheProvider')) {
+		if (class_exists($cache->getEntity()) && is_subclass_of($cache->getEntity(), 'Doctrine\Common\Cache\CacheProvider')) {
 			$ns = 'Kdyby_' . $serviceName;
 
 			if (preg_match('~^(?P<projectRoot>.+)(?:\\\\|\\/)vendor(?:\\\\|\\/)kdyby(?:\\\\|\\/)doctrine-cache(?:\\\\|\\/).+\\z~i', __DIR__, $m)) {
@@ -116,7 +116,7 @@ class Helpers extends Nette\Object
 				$args[$k] = self::doFilterArguments($v);
 
 			} elseif ($v instanceof Statement) {
-				$tmp = self::doFilterArguments(array($v->entity));
+				$tmp = self::doFilterArguments(array($v->getEntity()));
 				$args[$k] = new Statement($tmp[0], self::doFilterArguments($v->arguments));
 
 			} elseif ($v instanceof \stdClass && isset($v->value, $v->attributes)) {
