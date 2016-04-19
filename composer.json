@@ -21,7 +21,7 @@
 		"nette/di": "~2.3@dev",
 		"nette/caching": "~2.3@dev",
 
-		"doctrine/cache": "~1.5"
+		"doctrine/cache": "~1.6"
 	},
 	"require-dev": {
 		"nette/application": "~2.3@dev",
