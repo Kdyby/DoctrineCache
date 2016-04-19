@@ -81,6 +81,9 @@ class ExtensionTest extends Tester\TestCase
 		if (PHP_VERSION_ID < 50500) {
 			Tester\Environment::skip('ApcuCache is not supported on PHP 5.4');
 		}
+		if (!class_exists('Doctrine\Common\Cache\ApcuCache')) {
+			Tester\Environment::skip('Old doctrine/cache without ApcuCache is installed');
+		}
 
 		$container = $this->createContainer(__FUNCTION__, new EvalExtension(function (EvalExtension $extension) {
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, 'apcu', 'apcu', FALSE);
