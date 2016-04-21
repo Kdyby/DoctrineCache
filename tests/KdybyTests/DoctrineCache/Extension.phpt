@@ -37,7 +37,7 @@ class ExtensionTest extends Tester\TestCase
 			'container' => ['class' => 'SystemContainer_' . md5(time()) . '_' . $function],
 			'_method' => $function,
 		]);
-		$config->addConfig(__DIR__ . '/../nette-reset.neon', !isset($config->defaultExtensions['nette']) ? 'v23' : 'v22');
+		$config->addConfig(__DIR__ . '/../nette-reset.neon');
 
 		$config->onCompile[] = function ($config, Nette\DI\Compiler $compiler) use ($extension) {
 			$compiler->addExtension('eval', $extension);
