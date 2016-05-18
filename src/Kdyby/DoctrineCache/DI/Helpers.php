@@ -55,7 +55,7 @@ class Helpers extends Nette\Object
 		/** @var Statement $cache */
 
 		if (isset(self::$cacheDriverClasses[$impl])) {
-			$cache->setEntity(self::$cacheDriverClasses[$impl]);
+			$cache = new Statement(self::$cacheDriverClasses[$impl], $cache->arguments);
 		}
 
 		if ($impl === 'default') {
