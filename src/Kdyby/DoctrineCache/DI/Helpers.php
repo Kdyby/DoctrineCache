@@ -73,10 +73,6 @@ class Helpers extends Nette\Object
 			->setFactory($cache->getEntity(), $cache->arguments)
 			->setAutowired(FALSE);
 
-		if (method_exists($def, 'setInject')) {
-			@$def->setInject(FALSE); // wow, such deprecated, many BC!
-		}
-
 		if (class_exists($cache->getEntity()) && is_subclass_of($cache->getEntity(), 'Doctrine\Common\Cache\CacheProvider')) {
 			$ns = 'Kdyby_' . $serviceName;
 
