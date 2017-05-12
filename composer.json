@@ -28,11 +28,16 @@
 		"nette/tester": "^1.7"
 	},
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Kdyby\\DoctrineCache\\": "src/"
 		},
 		"classmap": [
-			"src/Kdyby/DoctrineCache/exceptions.php"
+			"src/exceptions.php"
+		]
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/KdybyTests/"
 		]
 	},
 	"extra": {
