@@ -52,4 +52,4 @@ class CacheTest extends Tester\TestCase
 
 }
 
-\run(new CacheTest());
+(new CacheTest())->run();

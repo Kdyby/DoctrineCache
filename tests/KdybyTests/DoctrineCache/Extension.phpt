@@ -145,4 +145,4 @@ class EvalExtension extends Nette\DI\CompilerExtension
 	}
 }
 
-\run(new ExtensionTest());
+(new ExtensionTest())->run();

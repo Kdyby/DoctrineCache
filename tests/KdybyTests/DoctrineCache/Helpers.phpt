@@ -98,4 +98,4 @@ class HelpersTest extends Tester\TestCase
 
 }
 
-\run(new HelpersTest());
+(new HelpersTest())->run();
