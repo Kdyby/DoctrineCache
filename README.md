@@ -5,7 +5,7 @@ Kdyby/DoctrineCache
 [![Downloads this Month](https://img.shields.io/packagist/dm/kdyby/doctrine-cache.svg)](https://packagist.org/packages/kdyby/doctrine-cache)
 [![Latest stable](https://img.shields.io/packagist/v/kdyby/doctrine-cache.svg)](https://packagist.org/packages/kdyby/doctrine-cache)
 [![Coverage Status](https://coveralls.io/repos/github/Kdyby/DoctrineCache/badge.svg?branch=master)](https://coveralls.io/github/Kdyby/DoctrineCache?branch=master)
-[![Join the chat at https://gitter.im/Kdyby/Help](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Kdyby/Help)
+
 
 
 Requirements
