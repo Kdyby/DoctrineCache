@@ -55,8 +55,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 	/**
-	 * @param $id
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	protected function doFetch($id)
 	{
@@ -67,8 +66,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 	/**
-	 * @param $id
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	protected function doContains($id)
 	{
@@ -78,10 +76,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 	/**
-	 * @param $id
-	 * @param $data
-	 * @param int $lifeTime
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	protected function doSave($id, $data, $lifeTime = 0)
 	{
@@ -133,8 +128,7 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 	/**
-	 * @param $id
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	protected function doDelete($id)
 	{
@@ -145,17 +139,22 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 
 
+	/**
+	 * {@inheritdoc}
+	 */
 	protected function doFlush()
 	{
 		$this->cache->clean([
 			NCache::TAGS => ['doctrine']
 		]);
+
+		return true;
 	}
 
 
 
 	/**
-	 * @return NULL
+	 * {@inheritdoc}
 	 */
 	protected function doGetStats()
 	{

@@ -42,7 +42,7 @@ class Helpers extends Nette\Object
 
 	/**
 	 * @param \Nette\DI\CompilerExtension $extension
-	 * @param string|\stdClass $cache
+	 * @param string|\stdClass|\Nette\DI\Statement $cache
 	 * @param string $suffix
 	 * @param bool $debug
 	 * @return string
@@ -51,7 +51,11 @@ class Helpers extends Nette\Object
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = ($cache instanceof \stdClass) ? $cache->value : (($cache instanceof Statement) ? $cache->getEntity() : (string) $cache);
+		$impl = ($cache instanceof \stdClass) ? $cache->value : (($cache instanceof Statement) ? $cache->getEntity() : $cache);
+		if (!is_string($impl)) {
+			throw new \InvalidArgumentException('Cache implementation cannot be resolved. Pass preferably string or Nette\DI\Statement as $cache argument.');
+		}
+
 		list($cache) = self::filterArgs($cache);
 		/** @var Statement $cache */
 
@@ -89,7 +93,7 @@ class Helpers extends Nette\Object
 
 
 	/**
-	 * @param string|\stdClass $statement
+	 * @param string|\stdClass|\Nette\DI\Statement $statement
 	 * @return Statement[]
 	 */
 	public static function filterArgs($statement)

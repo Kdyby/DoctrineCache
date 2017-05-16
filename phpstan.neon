@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		- '#Constant TEMP_DIR not found#'
+		# I'm not gonna install the extensions just so the classes exist...
+		- '#Kdyby\\DoctrineCache\\RedisCache::__construct\(\) has invalid typehint type Redis#'
+		- '#Kdyby\\DoctrineCache\\MemcachedCache::__construct\(\) has invalid typehint type Memcached#'
+		- '#Kdyby\\DoctrineCache\\MemcacheCache::__construct\(\) has invalid typehint type Memcache#'
