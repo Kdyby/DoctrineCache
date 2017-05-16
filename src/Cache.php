@@ -13,7 +13,6 @@ namespace Kdyby\DoctrineCache;
 use Doctrine;
 use Kdyby;
 use Nette;
-use Nette\Reflection\ClassType;
 use Nette\Caching\Cache AS NCache;
 use Nette\Utils\Strings;
 
@@ -92,18 +91,18 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 
 		$files = [];
 		if ($data instanceof Doctrine\ORM\Mapping\ClassMetadata) {
-			$files[] = ClassType::from($data->name)->getFileName();
+			$files[] = self::getClassFilename($data->name);
 			foreach ($data->parentClasses as $class) {
-				$files[] = ClassType::from($class)->getFileName();
+				$files[] = self::getClassFilename($class);
 			}
 		}
 		if ($data instanceof \Symfony\Component\Validator\Mapping\ClassMetadata) {
-			$files[] = ClassType::from($data->name)->getFileName();
+			$files[] = self::getClassFilename($data->name);
 		}
 
 		if (!empty($data)){
 			if (($m = Strings::match($id, '~(?P<class>[^@$[\].]+)(?:\$(?P<prop>[^@$[\].]+))?\@\[Annot\]~i')) && class_exists($m['class'])) {
-				$files[] = ClassType::from($m['class'])->getFileName();
+				$files[] = self::getClassFilename($m['class']);
 			}
 		}
 
@@ -167,6 +166,18 @@ class Cache extends Doctrine\Common\Cache\CacheProvider
 			self::STATS_MEMORY_USAGE => NULL,
 			self::STATS_MEMORY_AVAILABLE => NULL,
 		];
+	}
+
+
+
+	/**
+	 * @param string $className
+	 * @return string
+	 */
+	private static function getClassFilename($className)
+	{
+		$reflection = new \ReflectionClass($className);
+		return $reflection->getFileName();
 	}
 
 }
