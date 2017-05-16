@@ -25,7 +25,9 @@ class MemcacheCache extends Doctrine\Common\Cache\MemcacheCache
 
 	public function __construct(Memcache $memcache = NULL)
 	{
-		$this->setMemcache($memcache);
+		if ($memcache !== NULL) {
+			$this->setMemcache($memcache);
+		}
 	}
 
 }
