@@ -6,17 +6,6 @@ Kdyby/DoctrineCache
 [![Latest stable](https://img.shields.io/packagist/v/kdyby/doctrine-cache.svg)](https://packagist.org/packages/kdyby/doctrine-cache)
 [![Coverage Status](https://coveralls.io/repos/github/Kdyby/DoctrineCache/badge.svg?branch=master)](https://coveralls.io/github/Kdyby/DoctrineCache?branch=master)
 
-
-
-Requirements
-------------
-
-Kdyby/DoctrineCache requires PHP 5.4.
-
-- [Nette Framework](https://github.com/nette/nette)
-- [Doctrine Cache](https://github.com/doctrine/cache)
-
-
 Installation
 ------------
 
@@ -26,12 +15,10 @@ The best way to install Kdyby/DoctrineCache is using  [Composer](http://getcompo
 $ composer require kdyby/doctrine-cache
 ```
 
-
 Documentation
 ------------
 
 Learn more in the [documentation](https://github.com/Kdyby/DoctrineCache/blob/master/docs/en/index.md).
-
 
 -----
 
