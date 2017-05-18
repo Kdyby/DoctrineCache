@@ -28,60 +28,60 @@ class HelpersTest extends Tester\TestCase
 	public function dataFilterArgs()
 	{
 		return [
-			[[new Nette\DI\Statement('SplFileInfo')], 'SplFileInfo'],
-			[[['SplFileInfo']], ['SplFileInfo']],
+			[[new Nette\DI\Statement(\SplFileInfo::class)], \SplFileInfo::class],
+			[[[\SplFileInfo::class]], [\SplFileInfo::class]],
 
 			// BC
 			[
-				[new Nette\DI\Statement('SplFileInfo')],
-				(object) ['value' => 'SplFileInfo', 'attributes' => []]
+				[new Nette\DI\Statement(\SplFileInfo::class)],
+				(object) ['value' => \SplFileInfo::class, 'attributes' => []]
 			],
 			[
-				[[new Nette\DI\Statement('SplFileInfo')]],
-				[(object)['value' => 'SplFileInfo', 'attributes' => []]]
+				[[new Nette\DI\Statement(\SplFileInfo::class)]],
+				[(object)['value' => \SplFileInfo::class, 'attributes' => []]]
 			],
 			[
-				[[new Nette\DI\Statement('SplFileInfo', [__FILE__])]],
-				[(object)['value' => 'SplFileInfo', 'attributes' => [__FILE__]]]
+				[[new Nette\DI\Statement(\SplFileInfo::class, [__FILE__])]],
+				[(object)['value' => \SplFileInfo::class, 'attributes' => [__FILE__]]]
 			],
 			[
-				[new Nette\DI\Statement('SplFileInfo', [1 => __FILE__])],
-				(object) ['value' => 'SplFileInfo', 'attributes' => ['...', __FILE__]]
+				[new Nette\DI\Statement(\SplFileInfo::class, [1 => __FILE__])],
+				(object) ['value' => \SplFileInfo::class, 'attributes' => ['...', __FILE__]]
 			],
 			[
-				[new Nette\DI\Statement('SplFileInfo', [1 => new Nette\DI\Statement('SplFileInfo')])],
-				(object) ['value' => 'SplFileInfo', 'attributes' => [
+				[new Nette\DI\Statement(\SplFileInfo::class, [1 => new Nette\DI\Statement(\SplFileInfo::class)])],
+				(object) ['value' => \SplFileInfo::class, 'attributes' => [
 					'...',
-					(object) ['value' => 'SplFileInfo', 'attributes' => []]
+					(object) ['value' => \SplFileInfo::class, 'attributes' => []]
 				]]
 			],
 
 			// after https://github.com/nette/di/commit/7e4236c896621e910730375094adf79eb6ef6ea4
 			[
-				[new Nette\DI\Statement('SplFileInfo')],
-				new Nette\DI\Statement('SplFileInfo')
+				[new Nette\DI\Statement(\SplFileInfo::class)],
+				new Nette\DI\Statement(\SplFileInfo::class)
 			],
 			[
-				[new Nette\DI\Statement('SplFileInfo', [__FILE__])],
-				new Nette\DI\Statement('SplFileInfo', [__FILE__])
+				[new Nette\DI\Statement(\SplFileInfo::class, [__FILE__])],
+				new Nette\DI\Statement(\SplFileInfo::class, [__FILE__])
 			],
 			[
-				[new Nette\DI\Statement('SplFileInfo', [1 => __FILE__])],
-				new Nette\DI\Statement('SplFileInfo', ['...', __FILE__])
+				[new Nette\DI\Statement(\SplFileInfo::class, [1 => __FILE__])],
+				new Nette\DI\Statement(\SplFileInfo::class, ['...', __FILE__])
 			],
 			[
-				[new Nette\DI\Statement('SplFileInfo')],
-				new Nette\DI\Statement('SplFileInfo')
+				[new Nette\DI\Statement(\SplFileInfo::class)],
+				new Nette\DI\Statement(\SplFileInfo::class)
 			],
 			[
-				[new Nette\DI\Statement('SplFileInfo', [__FILE__, new Nette\DI\Statement('SplFileInfo', [1 => __FILE__])])],
-				new Nette\DI\Statement('SplFileInfo', [__FILE__, new Nette\DI\Statement('SplFileInfo', ['...', __FILE__])])
+				[new Nette\DI\Statement(\SplFileInfo::class, [__FILE__, new Nette\DI\Statement(\SplFileInfo::class, [1 => __FILE__])])],
+				new Nette\DI\Statement(\SplFileInfo::class, [__FILE__, new Nette\DI\Statement(\SplFileInfo::class, ['...', __FILE__])])
 			],
 
 			// single attribute does not have to be an array
 			[
-				[new Nette\DI\Statement('SplFileInfo', [__FILE__])],
-				(object) ['value' => 'SplFileInfo', 'attributes' => __FILE__]
+				[new Nette\DI\Statement(\SplFileInfo::class, [__FILE__])],
+				(object) ['value' => \SplFileInfo::class, 'attributes' => __FILE__]
 			],
 		];
 	}

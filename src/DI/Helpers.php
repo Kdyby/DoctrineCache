@@ -11,6 +11,7 @@
 namespace Kdyby\DoctrineCache\DI;
 
 use Kdyby;
+use Doctrine;
 use Nette;
 use Nette\DI\Statement;
 
@@ -26,16 +27,16 @@ class Helpers extends Nette\Object
 	 * @var array
 	 */
 	public static $cacheDriverClasses = [
-		'default' => 'Kdyby\DoctrineCache\Cache',
-		'apc' => 'Doctrine\Common\Cache\ApcCache',
-		'apcu' => 'Doctrine\Common\Cache\ApcuCache',
-		'array' => 'Doctrine\Common\Cache\ArrayCache',
-		'filesystem' => 'Doctrine\Common\Cache\FilesystemCache',
-		'memcache' => 'Kdyby\DoctrineCache\MemcacheCache',
-		'memcached' => 'Kdyby\DoctrineCache\MemcachedCache',
-		'redis' => 'Kdyby\DoctrineCache\RedisCache',
-		'void' => 'Doctrine\Common\Cache\VoidCache',
-		'xcache' => 'Doctrine\Common\Cache\XcacheCache',
+		'default' => Kdyby\DoctrineCache\Cache::class,
+		'apc' => Doctrine\Common\Cache\ApcCache::class,
+		'apcu' => Doctrine\Common\Cache\ApcuCache::class,
+		'array' => Doctrine\Common\Cache\ArrayCache::class,
+		'filesystem' => Doctrine\Common\Cache\FilesystemCache::class,
+		'memcache' => Kdyby\DoctrineCache\MemcacheCache::class,
+		'memcached' => Kdyby\DoctrineCache\MemcachedCache::class,
+		'redis' => Kdyby\DoctrineCache\RedisCache::class,
+		'void' => Doctrine\Common\Cache\VoidCache::class,
+		'xcache' => Doctrine\Common\Cache\XcacheCache::class,
 	];
 
 
@@ -73,11 +74,11 @@ class Helpers extends Nette\Object
 		}
 
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
-			->setClass('Doctrine\Common\Cache\Cache')
+			->setClass(Doctrine\Common\Cache\Cache::class)
 			->setFactory($cache->getEntity(), $cache->arguments)
 			->setAutowired(FALSE);
 
-		if (class_exists($cache->getEntity()) && is_subclass_of($cache->getEntity(), 'Doctrine\Common\Cache\CacheProvider')) {
+		if (class_exists($cache->getEntity()) && is_subclass_of($cache->getEntity(), Doctrine\Common\Cache\CacheProvider::class)) {
 			$ns = 'Kdyby_' . $serviceName;
 
 			if (preg_match('~^(?P<projectRoot>.+)(?:\\\\|\\/)vendor(?:\\\\|\\/)kdyby(?:\\\\|\\/)doctrine-cache(?:\\\\|\\/).+\\z~i', __DIR__, $m)) {

@@ -81,7 +81,7 @@ class ExtensionTest extends Tester\TestCase
 		if (PHP_VERSION_ID < 50500) {
 			Tester\Environment::skip('ApcuCache is not supported on PHP 5.4');
 		}
-		if (!class_exists('Doctrine\Common\Cache\ApcuCache')) {
+		if (!class_exists(Doctrine\Common\Cache\ApcuCache::class)) {
 			Tester\Environment::skip('Old doctrine/cache without ApcuCache is installed');
 		}
 
@@ -105,7 +105,7 @@ class ExtensionTest extends Tester\TestCase
 			$builder = $extension->getContainerBuilder();
 
 			$builder->addDefinition($extension->prefix('memcache'))
-				->setClass('Memcache');
+				->setClass(\Memcache::class);
 
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, (object) ['value' => 'memcache', 'attributes' => []], 'memcache.one', FALSE);
 			Kdyby\DoctrineCache\DI\Helpers::processCache($extension, new Nette\DI\Statement('memcache'), 'memcache.two', FALSE);
