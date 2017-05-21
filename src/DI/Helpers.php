@@ -10,36 +10,42 @@
 
 namespace Kdyby\DoctrineCache\DI;
 
-use Kdyby;
-use Doctrine;
-use Nette;
+use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\ApcuCache;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\VoidCache;
+use Doctrine\Common\Cache\XcacheCache;
+use Kdyby\DoctrineCache\Cache as NetteCacheAdapter;
+use Kdyby\DoctrineCache\MemcacheCache;
+use Kdyby\DoctrineCache\MemcachedCache;
+use Kdyby\DoctrineCache\RedisCache;
+use Nette\DI\CompilerExtension;
 use Nette\DI\Statement;
+use stdClass;
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
-class Helpers extends Nette\Object
+class Helpers
 {
 
+	use \Kdyby\StrictObjects\Scream;
+
 	/**
-	 * @var array
+	 * @var string[]
 	 */
 	public static $cacheDriverClasses = [
-		'default' => Kdyby\DoctrineCache\Cache::class,
-		'apc' => Doctrine\Common\Cache\ApcCache::class,
-		'apcu' => Doctrine\Common\Cache\ApcuCache::class,
-		'array' => Doctrine\Common\Cache\ArrayCache::class,
-		'filesystem' => Doctrine\Common\Cache\FilesystemCache::class,
-		'memcache' => Kdyby\DoctrineCache\MemcacheCache::class,
-		'memcached' => Kdyby\DoctrineCache\MemcachedCache::class,
-		'redis' => Kdyby\DoctrineCache\RedisCache::class,
-		'void' => Doctrine\Common\Cache\VoidCache::class,
-		'xcache' => Doctrine\Common\Cache\XcacheCache::class,
+		'default' => NetteCacheAdapter::class,
+		'apc' => ApcCache::class,
+		'apcu' => ApcuCache::class,
+		'array' => ArrayCache::class,
+		'filesystem' => FilesystemCache::class,
+		'memcache' => MemcacheCache::class,
+		'memcached' => MemcachedCache::class,
+		'redis' => RedisCache::class,
+		'void' => VoidCache::class,
+		'xcache' => XcacheCache::class,
 	];
-
-
 
 	/**
 	 * @param \Nette\DI\CompilerExtension $extension
@@ -48,18 +54,17 @@ class Helpers extends Nette\Object
 	 * @param bool $debug
 	 * @return string
 	 */
-	public static function processCache(Nette\DI\CompilerExtension $extension, $cache, $suffix, $debug = NULL)
+	public static function processCache(CompilerExtension $extension, $cache, $suffix, $debug = NULL)
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = ($cache instanceof \stdClass) ? $cache->value : (($cache instanceof Statement) ? $cache->getEntity() : $cache);
+		$impl = ($cache instanceof stdClass) ? $cache->value : (($cache instanceof Statement) ? $cache->getEntity() : $cache);
 		if (!is_string($impl)) {
 			throw new \InvalidArgumentException('Cache implementation cannot be resolved. Pass preferably string or Nette\DI\Statement as $cache argument.');
 		}
 
+		/** @var \Nette\DI\Statement $cache */
 		list($cache) = self::filterArgs($cache);
-		/** @var Statement $cache */
-
 		if (isset(self::$cacheDriverClasses[$impl])) {
 			$cache = new Statement(self::$cacheDriverClasses[$impl], $cache->arguments);
 		}
@@ -74,11 +79,11 @@ class Helpers extends Nette\Object
 		}
 
 		$def = $builder->addDefinition($serviceName = $extension->prefix('cache.' . $suffix))
-			->setClass(Doctrine\Common\Cache\Cache::class)
+			->setClass(Cache::class)
 			->setFactory($cache->getEntity(), $cache->arguments)
 			->setAutowired(FALSE);
 
-		if (class_exists($cache->getEntity()) && is_subclass_of($cache->getEntity(), Doctrine\Common\Cache\CacheProvider::class)) {
+		if (class_exists($cache->getEntity()) && is_subclass_of($cache->getEntity(), CacheProvider::class)) {
 			$ns = 'Kdyby_' . $serviceName;
 
 			if (preg_match('~^(?P<projectRoot>.+)(?:\\\\|\\/)vendor(?:\\\\|\\/)kdyby(?:\\\\|\\/)doctrine-cache(?:\\\\|\\/).+\\z~i', __DIR__, $m)) {
@@ -91,21 +96,18 @@ class Helpers extends Nette\Object
 		return '@' . $serviceName;
 	}
 
-
-
 	/**
 	 * @param string|\stdClass|\Nette\DI\Statement $statement
-	 * @return Statement[]
+	 * @return \Nette\DI\Statement[]
 	 */
 	public static function filterArgs($statement)
 	{
 		return self::doFilterArguments([is_string($statement) ? new Statement($statement) : $statement]);
 	}
 
-
-
 	/**
 	 * Removes ... recursively.
+	 *
 	 * @return array
 	 */
 	private static function doFilterArguments(array $args)
@@ -121,7 +123,7 @@ class Helpers extends Nette\Object
 				$tmp = self::doFilterArguments([$v->getEntity()]);
 				$args[$k] = new Statement($tmp[0], self::doFilterArguments($v->arguments));
 
-			} elseif ($v instanceof \stdClass && isset($v->value, $v->attributes)) {
+			} elseif ($v instanceof stdClass && isset($v->value, $v->attributes)) {
 				$tmp = self::doFilterArguments([$v->value]);
 				$args[$k] = new Statement($tmp[0], self::doFilterArguments(is_array($v->attributes) ? $v->attributes : [$v->attributes]));
 			}

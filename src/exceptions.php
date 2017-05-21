@@ -10,16 +10,12 @@
 
 namespace Kdyby\DoctrineCache;
 
-
-
 interface Exception
 {
 
 }
 
-
-
-class NotImplementedException extends \LogicException implements Exception
+class NotImplementedException extends \LogicException implements \Kdyby\DoctrineCache\Exception
 {
 
 }

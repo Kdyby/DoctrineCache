@@ -11,30 +11,22 @@
 namespace Kdyby\DoctrineCache;
 
 use Doctrine\Common\Cache\CacheProvider;
-use Kdyby;
-use Nette;
+use Nette\Caching\Cache as NCache;
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
-class ReversedStorageDecorator extends Nette\Object implements Nette\Caching\IStorage
+class ReversedStorageDecorator implements \Nette\Caching\IStorage
 {
 
+	use \Kdyby\StrictObjects\Scream;
+
 	/**
-	 * @var CacheProvider
+	 * @var \Doctrine\Common\Cache\CacheProvider
 	 */
 	private $provider;
-
-
 
 	public function __construct(CacheProvider $provider)
 	{
 		$this->provider = $provider;
 	}
-
-
 
 	/**
 	 * Read from cache.
@@ -48,8 +40,6 @@ class ReversedStorageDecorator extends Nette\Object implements Nette\Caching\ISt
 		return $data === FALSE ? NULL : $data;
 	}
 
-
-
 	/**
 	 * Prevents item reading and writing. Lock is released by write() or remove().
 	 *
@@ -60,8 +50,6 @@ class ReversedStorageDecorator extends Nette\Object implements Nette\Caching\ISt
 	{
 		// sorry!
 	}
-
-
 
 	/**
 	 * Writes item into the cache.
@@ -76,8 +64,6 @@ class ReversedStorageDecorator extends Nette\Object implements Nette\Caching\ISt
 		$this->provider->save($key, $data);
 	}
 
-
-
 	/**
 	 * Removes item from the cache.
 	 *
@@ -89,8 +75,6 @@ class ReversedStorageDecorator extends Nette\Object implements Nette\Caching\ISt
 		$this->provider->delete($key);
 	}
 
-
-
 	/**
 	 * Removes items from the cache by conditions.
 	 *
@@ -99,8 +83,8 @@ class ReversedStorageDecorator extends Nette\Object implements Nette\Caching\ISt
 	 */
 	public function clean(array $conditions)
 	{
-		if (!isset($conditions[Nette\Caching\Cache::ALL])) {
-			throw new NotImplementedException;
+		if (!isset($conditions[NCache::ALL])) {
+			throw new \Kdyby\DoctrineCache\NotImplementedException();
 		}
 
 		$this->provider->deleteAll();

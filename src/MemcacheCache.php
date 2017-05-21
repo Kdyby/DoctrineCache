@@ -10,18 +10,12 @@
 
 namespace Kdyby\DoctrineCache;
 
-use Doctrine;
-use Kdyby;
 use Memcache;
-use Nette;
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
-class MemcacheCache extends Doctrine\Common\Cache\MemcacheCache
+class MemcacheCache extends \Doctrine\Common\Cache\MemcacheCache
 {
+
+	use \Kdyby\StrictObjects\Scream;
 
 	public function __construct(Memcache $memcache = NULL)
 	{

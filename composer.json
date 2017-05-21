@@ -18,9 +18,10 @@
 	},
 	"require": {
 		"php": "^5.6 || ^7.0",
+		"doctrine/cache": "^1.5",
 		"nette/di": "^2.4@dev",
 		"nette/caching": "^2.4@dev",
-		"doctrine/cache": "^1.5"
+		"kdyby/strict-objects": "^1.0"
 	},
 	"require-dev": {
 		"doctrine/orm": "^2.5",
@@ -38,6 +39,9 @@
 		]
 	},
 	"autoload-dev": {
+		"psr-4": {
+			"KdybyTests\\": "tests/KdybyTests/"
+		},
 		"classmap": [
 			"tests/KdybyTests/"
 		]

@@ -3,32 +3,24 @@
 /**
  * Test: Kdyby\Doctrine\DI\Helpers.
  *
- * @testCase Kdyby\Doctrine\CacheTest
- * @author Filip Procházka <filip@prochazka.su>
- * @package Kdyby\Doctrine
+ * @testCase
  */
 
-namespace KdybyTests\Doctrine;
+namespace KdybyTests\DoctrineCache;
 
-use Kdyby;
-use Nette;
-use Tester;
+use Kdyby\DoctrineCache\Cache as NetteCacheAdapter;
+use Nette\Caching\Storages\MemoryStorage;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
-class CacheTest extends Tester\TestCase
+class CacheTest extends \Tester\TestCase
 {
 
 	public function testNonexistentKey()
 	{
-		$storage = new Nette\Caching\Storages\MemoryStorage();
-		$cache = new Kdyby\DoctrineCache\Cache($storage, 'ns');
+		$storage = new MemoryStorage();
+		$cache = new NetteCacheAdapter($storage, 'ns');
 
 		Assert::false($cache->contains('nonexistent-key'));
 		Assert::false($cache->fetch('nonexistent-key'));
@@ -41,8 +33,8 @@ class CacheTest extends Tester\TestCase
 
 	public function testStoringNull()
 	{
-		$storage = new Nette\Caching\Storages\MemoryStorage();
-		$cache = new Kdyby\DoctrineCache\Cache($storage, 'ns');
+		$storage = new MemoryStorage();
+		$cache = new NetteCacheAdapter($storage, 'ns');
 
 		$cache->save('nonexistent-key', NULL);
 

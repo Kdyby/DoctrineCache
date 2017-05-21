@@ -10,17 +10,12 @@
 
 namespace Kdyby\DoctrineCache;
 
-use Kdyby;
-use Nette;
 use Redis;
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
 class RedisCache extends \Doctrine\Common\Cache\RedisCache
 {
+
+	use \Kdyby\StrictObjects\Scream;
 
 	public function __construct(Redis $redis = NULL)
 	{
