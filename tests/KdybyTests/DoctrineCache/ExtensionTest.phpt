@@ -29,7 +29,7 @@ class ExtensionTest extends \Tester\TestCase
 {
 
 	/**
-	 * @return \SystemContainer|\Nette\DI\Container
+	 * @return \Nette\DI\Container
 	 */
 	public function createContainer($function, $extension)
 	{
