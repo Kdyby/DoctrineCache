@@ -19,7 +19,7 @@
 	"require": {
 		"php": "^5.6 || ^7.0",
 		"doctrine/cache": "^1.5",
-		"nette/di": "^2.4@dev",
+		"nette/di": "^2.4.7@dev",
 		"nette/caching": "^2.4@dev",
 		"kdyby/strict-objects": "^1.0"
 	},
@@ -30,6 +30,10 @@
 		"nette/tester": "^1.7"
 	},
 	"minimum-stability": "dev",
+	"conflict": {
+		"nette/reflection": "<2.4.2",
+		"nette/utils": "<2.4.5"
+	},	
 	"autoload": {
 		"psr-4": {
 			"Kdyby\\DoctrineCache\\": "src/"
