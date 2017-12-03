@@ -25,7 +25,7 @@
 	},
 	"require-dev": {
 		"doctrine/orm": "^2.5",
-		"symfony/validator": "^2.5.3 || ^3.0",
+		"symfony/validator": "^2.5.3 || ^3.0 || ^4.0",
 		"nette/bootstrap": "^2.4@dev",
 		"nette/tester": "^1.7"
 	},
