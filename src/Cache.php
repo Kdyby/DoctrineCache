@@ -108,7 +108,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	protected function doSaveDependingOnFiles($id, $data, array $files, $lifeTime = 0)
 	{
 		$dp = [NCache::TAGS => ['doctrine'], NCache::FILES => $files];
-		if ($lifeTime !== 0) {
+		if ($lifeTime > 0) {
 			$dp[NCache::EXPIRE] = time() + $lifeTime;
 		}
 
