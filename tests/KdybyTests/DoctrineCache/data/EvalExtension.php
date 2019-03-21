@@ -15,9 +15,9 @@ class EvalExtension extends \Nette\DI\CompilerExtension
 		$this->loadConfiguration = $loadConfiguration;
 	}
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
-		call_user_func($this->loadConfiguration, $this);
+		\call_user_func($this->loadConfiguration, $this);
 	}
 
 }

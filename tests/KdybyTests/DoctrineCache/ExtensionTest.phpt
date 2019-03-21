@@ -31,7 +31,7 @@ class ExtensionTest extends \Tester\TestCase
 	/**
 	 * @return \Nette\DI\Container
 	 */
-	public function createContainer($function, $extension)
+	public function createContainer($function, $extension): \Nette\DI\Container
 	{
 		$config = new Configurator();
 		$config->setTempDirectory(TEMP_DIR);
@@ -48,7 +48,7 @@ class ExtensionTest extends \Tester\TestCase
 		return $config->createContainer();
 	}
 
-	public function testFunctionality()
+	public function testFunctionality(): void
 	{
 		$container = $this->createContainer(__FUNCTION__, new EvalExtension(function (EvalExtension $extension) {
 			DICacheHelpers::processCache($extension, 'default', 'default', FALSE);
@@ -74,7 +74,7 @@ class ExtensionTest extends \Tester\TestCase
 		Assert::true($default instanceof ApcCache);
 	}
 
-	public function testFunctionalityApcu()
+	public function testFunctionalityApcu(): void
 	{
 		if (PHP_VERSION_ID < 50500) {
 			TesterEnvironment::skip('ApcuCache is not supported on PHP 5.4');
@@ -91,7 +91,7 @@ class ExtensionTest extends \Tester\TestCase
 		Assert::true($default instanceof ApcuCache);
 	}
 
-	public function testFunctionalityMemcache()
+	public function testFunctionalityMemcache(): void
 	{
 		if (!extension_loaded('memcache')) {
 			TesterEnvironment::skip('The memcache extension is not loaded');

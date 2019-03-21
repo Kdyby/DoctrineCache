@@ -18,7 +18,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class HelpersTest extends \Tester\TestCase
 {
 
-	public function dataFilterArgs()
+	public function dataFilterArgs(): array
 	{
 		return [
 			[[new Statement(SplFileInfo::class)], SplFileInfo::class],
@@ -85,7 +85,7 @@ class HelpersTest extends \Tester\TestCase
 	/**
 	 * @dataProvider dataFilterArgs
 	 */
-	public function testFilterArgs(array $expected, $args)
+	public function testFilterArgs(array $expected, $args): void
 	{
 		Assert::equal($expected, DICacheHelpers::filterArgs($args));
 	}
