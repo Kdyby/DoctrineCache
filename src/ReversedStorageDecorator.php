@@ -84,7 +84,7 @@ class ReversedStorageDecorator implements \Nette\Caching\IStorage
 	public function clean(array $conditions)
 	{
 		if (!isset($conditions[NCache::ALL])) {
-			throw new \Kdyby\DoctrineCache\NotImplementedException();
+			throw new \Kdyby\DoctrineCache\Exception\NotImplementedException();
 		}
 
 		$this->provider->deleteAll();

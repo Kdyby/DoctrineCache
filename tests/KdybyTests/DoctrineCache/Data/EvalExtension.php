@@ -1,6 +1,6 @@
 <?php
 
-namespace KdybyTests\DoctrineCache;
+namespace KdybyTests\DoctrineCache\Data;
 
 class EvalExtension extends \Nette\DI\CompilerExtension
 {

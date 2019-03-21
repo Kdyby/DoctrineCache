@@ -14,8 +14,3 @@ interface Exception
 {
 
 }
-
-class NotImplementedException extends \LogicException implements \Kdyby\DoctrineCache\Exception
-{
-
-}

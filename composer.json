@@ -42,18 +42,12 @@
 	"autoload": {
 		"psr-4": {
 			"Kdyby\\DoctrineCache\\": "src/"
-		},
-		"classmap": [
-			"src/exceptions.php"
-		]
+		}
 	},
 	"autoload-dev": {
 		"psr-4": {
 			"KdybyTests\\": "tests/KdybyTests/"
-		},
-		"classmap": [
-			"tests/KdybyTests/"
-		]
+		}
 	},
 	"extra": {
 		"branch-alias": {
