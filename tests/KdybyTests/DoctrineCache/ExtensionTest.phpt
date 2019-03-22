@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * Test: Kdyby\Doctrine\Extension.
  *
@@ -16,33 +18,32 @@ use Doctrine\Common\Cache\VoidCache;
 use Kdyby\DoctrineCache\Cache as NetteCacheAdapter;
 use Kdyby\DoctrineCache\DI\Helpers as DICacheHelpers;
 use Kdyby\DoctrineCache\MemcacheCache;
+use KdybyTests\DoctrineCache\Data\EvalExtension;
 use Memcache;
 use Nette\Configurator;
 use Nette\DI\Compiler;
+use Nette\DI\CompilerExtension;
+use Nette\DI\Container;
 use Nette\DI\Statement;
 use Tester\Assert;
 use Tester\Environment as TesterEnvironment;
-use KdybyTests\DoctrineCache\Data\EvalExtension;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 class ExtensionTest extends \Tester\TestCase
 {
 
-	/**
-	 * @return \Nette\DI\Container
-	 */
-	public function createContainer($function, $extension): \Nette\DI\Container
+	public function createContainer(string $function, CompilerExtension $extension): Container
 	{
 		$config = new Configurator();
 		$config->setTempDirectory(TEMP_DIR);
 		$config->addParameters([
-			'container' => ['class' => 'SystemContainer_' . md5(time()) . '_' . $function],
+			'container' => ['class' => 'SystemContainer_' . md5((string) time()) . '_' . $function],
 			'_method' => $function,
 		]);
 		$config->addConfig(__DIR__ . '/../nette-reset.neon');
 
-		$config->onCompile[] = function ($config, Compiler $compiler) use ($extension) {
+		$config->onCompile[] = static function ($config, Compiler $compiler) use ($extension): void {
 			$compiler->addExtension('eval', $extension);
 		};
 
@@ -54,7 +55,7 @@ class ExtensionTest extends \Tester\TestCase
 		$container = $this->createContainer(
 			__FUNCTION__,
 			new EvalExtension(
-				function (EvalExtension $extension) {
+				static function (EvalExtension $extension): void {
 					DICacheHelpers::processCache($extension, 'default', 'default', FALSE);
 					DICacheHelpers::processCache($extension, 'array', 'array', FALSE);
 					DICacheHelpers::processCache($extension, 'filesystem', 'filesystem', FALSE);
@@ -92,7 +93,7 @@ class ExtensionTest extends \Tester\TestCase
 		$container = $this->createContainer(
 			__FUNCTION__,
 			new EvalExtension(
-				function (EvalExtension $extension) {
+				static function (EvalExtension $extension): void {
 					DICacheHelpers::processCache($extension, 'apcu', 'apcu', FALSE);
 				}
 			)
@@ -111,7 +112,7 @@ class ExtensionTest extends \Tester\TestCase
 		$container = $this->createContainer(
 			__FUNCTION__,
 			new EvalExtension(
-				function (EvalExtension $extension) {
+				static function (EvalExtension $extension): void {
 					$builder = $extension->getContainerBuilder();
 
 					$builder->addDefinition($extension->prefix('memcache'))

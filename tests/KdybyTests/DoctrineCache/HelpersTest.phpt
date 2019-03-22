@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * Test: Kdyby\Doctrine\DI\Helpers.
  *
@@ -18,6 +20,9 @@ require_once __DIR__ . '/../bootstrap.php';
 class HelpersTest extends \Tester\TestCase
 {
 
+	/**
+	 * @return array|mixed[]
+	 */
 	public function dataFilterArgs(): array
 	{
 		return [
@@ -83,6 +88,8 @@ class HelpersTest extends \Tester\TestCase
 	}
 
 	/**
+	 * @param mixed[] $expected
+	 * @param mixed $args
 	 * @dataProvider dataFilterArgs
 	 */
 	public function testFilterArgs(array $expected, $args): void

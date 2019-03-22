@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the Kdyby (http://www.kdyby.org)
  *
@@ -23,7 +25,7 @@ use Kdyby\DoctrineCache\MemcacheCache;
 use Kdyby\DoctrineCache\MemcachedCache;
 use Kdyby\DoctrineCache\RedisCache;
 use Nette\DI\CompilerExtension;
-use Nette\DI\Statement;
+use Nette\DI\Definitions\Statement;
 use stdClass;
 
 class Helpers
@@ -49,29 +51,29 @@ class Helpers
 
 	/**
 	 * @param \Nette\DI\CompilerExtension $extension
-	 * @param string|\stdClass|\Nette\DI\Statement $cache
+	 * @param string|\stdClass|\Nette\DI\Definitions\Statement $cache
 	 * @param string $suffix
-	 * @param bool $debug
+	 * @param bool|null $debug
 	 * @return string
 	 */
-	public static function processCache(CompilerExtension $extension, $cache, $suffix, $debug = NULL)
+	public static function processCache(CompilerExtension $extension, $cache, string $suffix, ?bool $debug = NULL): string
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = ($cache instanceof stdClass) ? $cache->value : (($cache instanceof Statement) ? $cache->getEntity() : $cache);
+		$impl = $cache instanceof stdClass ? $cache->value : ($cache instanceof Statement ? $cache->getEntity() : $cache);
 		if (!is_string($impl)) {
 			throw new \InvalidArgumentException('Cache implementation cannot be resolved. Pass preferably string or Nette\DI\Statement as $cache argument.');
 		}
 
-		/** @var \Nette\DI\Statement $cache */
-		list($cache) = self::filterArgs($cache);
+		/** @var \Nette\DI\Definitions\Statement $cache */
+		[$cache] = self::filterArgs($cache);
 		if (isset(self::$cacheDriverClasses[$impl])) {
 			$cache = new Statement(self::$cacheDriverClasses[$impl], $cache->arguments);
 		}
 
 		if ($impl === 'default') {
 			$cache->arguments[1] = 'Doctrine.' . ucfirst($suffix);
-			$cache->arguments[2] = $debug !== NULL ? $debug : $builder->parameters['debugMode'];
+			$cache->arguments[2] = $debug ?? $builder->parameters['debugMode'];
 		}
 
 		if ($impl === 'filesystem') {
@@ -97,10 +99,10 @@ class Helpers
 	}
 
 	/**
-	 * @param string|\stdClass|\Nette\DI\Statement $statement
+	 * @param string|\stdClass|\Nette\DI\Definitions\Statement $statement
 	 * @return \Nette\DI\Statement[]
 	 */
-	public static function filterArgs($statement)
+	public static function filterArgs($statement): array
 	{
 		return self::doFilterArguments([is_string($statement) ? new Statement($statement) : $statement]);
 	}
@@ -108,9 +110,10 @@ class Helpers
 	/**
 	 * Removes ... recursively.
 	 *
-	 * @return array
+	 * @param array|mixed[] $args
+	 * @return \Nette\DI\Statement[]
 	 */
-	private static function doFilterArguments(array $args)
+	private static function doFilterArguments(array $args): array
 	{
 		foreach ($args as $k => $v) {
 			if ($v === '...') {

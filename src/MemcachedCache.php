@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the Kdyby (http://www.kdyby.org)
  *
@@ -17,7 +19,7 @@ class MemcachedCache extends \Doctrine\Common\Cache\MemcachedCache
 
 	use \Kdyby\StrictObjects\Scream;
 
-	public function __construct(Memcached $memcached = NULL)
+	public function __construct(?Memcached $memcached = NULL)
 	{
 		if ($memcached !== NULL) {
 			$this->setMemcached($memcached);

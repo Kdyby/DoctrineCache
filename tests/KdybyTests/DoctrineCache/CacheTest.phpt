@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * Test: Kdyby\Doctrine\DI\Helpers.
  *
@@ -48,10 +50,8 @@ class CacheTest extends \Tester\TestCase
 		$cache = new NetteCacheAdapter($storage, 'ns');
 
 		$cache->save('foo1', 'data', 0);
-		$cache->save('foo2', 'data', NULL);
 
 		Assert::true($cache->contains('foo1'));
-		Assert::true($cache->contains('foo2'));
 	}
 
 }
