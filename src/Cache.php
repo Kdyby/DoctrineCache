@@ -25,8 +25,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata as SymfonyClassMetadata;
 class Cache extends \Doctrine\Common\Cache\CacheProvider
 {
 
-	use \Kdyby\StrictObjects\Scream;
-
 	public const CACHE_NS = 'Doctrine';
 
 	/**
@@ -39,11 +37,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	 */
 	private $debug;
 
-	public function __construct(
-		IStorage $storage,
-		string $namespace = self::CACHE_NS,
-		bool $debugMode = FALSE
-	)
+	public function __construct(IStorage $storage, string $namespace = self::CACHE_NS, bool $debugMode = FALSE)
 	{
 		$this->cache = new NCache($storage, $namespace);
 		$this->debug = $debugMode;
@@ -67,7 +61,13 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Puts data into the cache.
+	 *
+	 * @param string $id       The cache id.
+	 * @param string|\Symfony\Component\Validator\Mapping\ClassMetadata|\Doctrine\ORM\Mapping\ClassMetadata $data     The cache entry/data.
+	 * @param int    $lifeTime The lifetime. If != 0, sets a specific lifetime for this
+	 *                           cache entry (0 => infinite lifeTime).
+	 * @return bool TRUE if the entry was successfully stored in the cache, FALSE otherwise.
 	 */
 	protected function doSave($id, $data, $lifeTime = 0): bool
 	{
@@ -147,14 +147,10 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 		];
 	}
 
-	/**
-	 * @return string|bool
-	 * @throws \ReflectionException
-	 */
-	private static function getClassFilename(string $className)
+	private static function getClassFilename(string $className): string
 	{
 		$reflection = new ReflectionClass($className);
-		return $reflection->getFileName();
+		return (string) $reflection->getFileName();
 	}
 
 }

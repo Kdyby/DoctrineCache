@@ -17,8 +17,6 @@ use Memcache;
 class MemcacheCache extends \Doctrine\Common\Cache\MemcacheCache
 {
 
-	use \Kdyby\StrictObjects\Scream;
-
 	public function __construct(?Memcache $memcache = NULL)
 	{
 		if ($memcache !== NULL) {

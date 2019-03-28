@@ -4,3 +4,4 @@ parameters:
 		- '#Kdyby\\DoctrineCache\\RedisCache::__construct\(\) has invalid typehint type Redis#'
 		- '#Kdyby\\DoctrineCache\\MemcachedCache::__construct\(\) has invalid typehint type Memcached#'
 		- '#Kdyby\\DoctrineCache\\MemcacheCache::__construct\(\) has invalid typehint type Memcache#'
+		- '#Parameter \#1 $classname of function (class_exists|is_subclass_of) expects string, array|Nette\\DI\\Definitions\\Definition|Nette\\DI\\Definitions\\Reference|string|null given#'

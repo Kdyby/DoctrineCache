@@ -18,8 +18,6 @@ use Nette\Caching\Cache as NCache;
 class ReversedStorageDecorator implements \Nette\Caching\IStorage
 {
 
-	use \Kdyby\StrictObjects\Scream;
-
 	/**
 	 * @var \Doctrine\Common\Cache\CacheProvider
 	 */
@@ -31,7 +29,9 @@ class ReversedStorageDecorator implements \Nette\Caching\IStorage
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Read from cache.
+	 *
+	 * @return mixed|NULL
 	 */
 	public function read(string $key)
 	{
@@ -39,6 +39,9 @@ class ReversedStorageDecorator implements \Nette\Caching\IStorage
 		return $data === FALSE ? NULL : $data;
 	}
 
+	/**
+	 * Prevents item reading and writing. Lock is released by write() or remove().
+	 */
 	public function lock(string $key): void
 	{
 		// sorry!
@@ -52,13 +55,18 @@ class ReversedStorageDecorator implements \Nette\Caching\IStorage
 		$this->provider->save($key, $data);
 	}
 
+	/**
+	 * Removes item from the cache.
+	 */
 	public function remove(string $key): void
 	{
 		$this->provider->delete($key);
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Removes items from the cache by conditions.
+	 *
+	 * @param string[] $conditions
 	 */
 	public function clean(array $conditions): void
 	{
