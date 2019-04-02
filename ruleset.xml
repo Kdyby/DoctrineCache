@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<ruleset name="Kdyby/DoctrineCache">
-	<rule ref="vendor/kdyby/coding-standard/KdybyCodingStandard/ruleset-7.1.xml"/>
-
-	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
-		<exclude-pattern>src/Exception/NotImplementedException.php</exclude-pattern>
-	</rule>
-</ruleset>
