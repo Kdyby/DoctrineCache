@@ -12,9 +12,7 @@ declare(strict_types = 1);
 
 namespace Kdyby\DoctrineCache\Exception;
 
-class NotImplementedException extends \LogicException implements \Kdyby\DoctrineCache\Exception
+class NotImplementedException extends \LogicException implements \Kdyby\DoctrineCache\Exception\Exception
 {
 
 }
-
-class_alias(\Kdyby\DoctrineCache\Exception\NotImplementedException::class, '\Kdyby\DoctrineCache\NotImplementedException');
