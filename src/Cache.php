@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the Kdyby (http://www.kdyby.org)
  *
@@ -10,10 +12,7 @@
 
 namespace Kdyby\DoctrineCache;
 
-use Doctrine;
 use Doctrine\ORM\Mapping\ClassMetadata as DoctrineClassMetadata;
-use Kdyby;
-use Nette;
 use Nette\Caching\Cache as NCache;
 use Nette\Caching\IStorage;
 use Nette\Utils\Strings;
@@ -28,7 +27,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 
 	use \Kdyby\StrictObjects\Scream;
 
-	const CACHE_NS = 'Doctrine';
+	public const CACHE_NS = 'Doctrine';
 
 	/**
 	 * @var \Nette\Caching\Cache
@@ -38,14 +37,13 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	/**
 	 * @var bool
 	 */
-	private $debug = FALSE;
+	private $debug;
 
-	/**
-	 * @param \Nette\Caching\IStorage $storage
-	 * @param string $namespace
-	 * @param bool $debugMode
-	 */
-	public function __construct(IStorage $storage, $namespace = self::CACHE_NS, $debugMode = FALSE)
+	public function __construct(
+		IStorage $storage,
+		string $namespace = self::CACHE_NS,
+		bool $debugMode = FALSE
+	)
 	{
 		$this->cache = new NCache($storage, $namespace);
 		$this->debug = $debugMode;
@@ -57,13 +55,13 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	protected function doFetch($id)
 	{
 		$cached = $this->cache->load($id);
-		return $cached === NULL ? FALSE : $cached;
+		return $cached ?? FALSE;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function doContains($id)
+	protected function doContains($id): bool
 	{
 		return $this->cache->load($id) !== NULL;
 	}
@@ -71,7 +69,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function doSave($id, $data, $lifeTime = 0)
+	protected function doSave($id, $data, $lifeTime = 0): bool
 	{
 		if ($this->debug !== TRUE) {
 			return $this->doSaveDependingOnFiles($id, $data, [], $lifeTime);
@@ -101,11 +99,10 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	/**
 	 * @param string $id
 	 * @param mixed $data
-	 * @param array $files
+	 * @param string[] $files
 	 * @param int $lifeTime
-	 * @return bool
 	 */
-	protected function doSaveDependingOnFiles($id, $data, array $files, $lifeTime = 0)
+	protected function doSaveDependingOnFiles(string $id, $data, array $files, int $lifeTime = 0): bool
 	{
 		$dp = [NCache::TAGS => ['doctrine'], NCache::FILES => $files];
 		if ($lifeTime > 0) {
@@ -120,17 +117,14 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function doDelete($id)
+	protected function doDelete($id): bool
 	{
 		$this->cache->save($id, NULL);
 
 		return TRUE;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function doFlush()
+	protected function doFlush(): bool
 	{
 		$this->cache->clean([
 			NCache::TAGS => ['doctrine'],
@@ -142,7 +136,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function doGetStats()
+	protected function doGetStats(): array
 	{
 		return [
 			self::STATS_HITS => NULL,
@@ -154,10 +148,10 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	}
 
 	/**
-	 * @param string $className
-	 * @return string
+	 * @return string|bool
+	 * @throws \ReflectionException
 	 */
-	private static function getClassFilename($className)
+	private static function getClassFilename(string $className)
 	{
 		$reflection = new ReflectionClass($className);
 		return $reflection->getFileName();

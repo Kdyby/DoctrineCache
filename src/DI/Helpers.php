@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the Kdyby (http://www.kdyby.org)
  *
@@ -23,7 +25,6 @@ use Kdyby\DoctrineCache\MemcacheCache;
 use Kdyby\DoctrineCache\MemcachedCache;
 use Kdyby\DoctrineCache\RedisCache;
 use Nette\DI\CompilerExtension;
-use Nette\DI\Statement;
 use stdClass;
 
 class Helpers
@@ -49,29 +50,29 @@ class Helpers
 
 	/**
 	 * @param \Nette\DI\CompilerExtension $extension
-	 * @param string|\stdClass|\Nette\DI\Statement $cache
+	 * @param string|\stdClass|\Nette\DI\Definitions\Statement $cache
 	 * @param string $suffix
-	 * @param bool $debug
+	 * @param bool|null $debug
 	 * @return string
 	 */
-	public static function processCache(CompilerExtension $extension, $cache, $suffix, $debug = NULL)
+	public static function processCache(CompilerExtension $extension, $cache, string $suffix, ?bool $debug = NULL): string
 	{
 		$builder = $extension->getContainerBuilder();
 
-		$impl = ($cache instanceof stdClass) ? $cache->value : (($cache instanceof Statement) ? $cache->getEntity() : $cache);
+		$impl = $cache instanceof stdClass ? $cache->value : ($cache instanceof \Nette\DI\Definitions\Statement ? $cache->getEntity() : $cache);
 		if (!is_string($impl)) {
-			throw new \InvalidArgumentException('Cache implementation cannot be resolved. Pass preferably string or Nette\DI\Statement as $cache argument.');
+			throw new \InvalidArgumentException('Cache implementation cannot be resolved. Pass preferably string or \Nette\DI\Definitions\Statement as $cache argument.');
 		}
 
-		/** @var \Nette\DI\Statement $cache */
-		list($cache) = self::filterArgs($cache);
+		/** @var \Nette\DI\Definitions\Statement $cache */
+		[$cache] = self::filterArgs($cache);
 		if (isset(self::$cacheDriverClasses[$impl])) {
-			$cache = new Statement(self::$cacheDriverClasses[$impl], $cache->arguments);
+			$cache = new \Nette\DI\Definitions\Statement(self::$cacheDriverClasses[$impl], $cache->arguments);
 		}
 
 		if ($impl === 'default') {
 			$cache->arguments[1] = 'Doctrine.' . ucfirst($suffix);
-			$cache->arguments[2] = $debug !== NULL ? $debug : $builder->parameters['debugMode'];
+			$cache->arguments[2] = $debug ?? $builder->parameters['debugMode'];
 		}
 
 		if ($impl === 'filesystem') {
@@ -97,20 +98,21 @@ class Helpers
 	}
 
 	/**
-	 * @param string|\stdClass|\Nette\DI\Statement $statement
-	 * @return \Nette\DI\Statement[]
+	 * @param string|\stdClass|\Nette\DI\Definitions\Statement $statement
+	 * @return \Nette\DI\Definitions\Statement[]
 	 */
-	public static function filterArgs($statement)
+	public static function filterArgs($statement): array
 	{
-		return self::doFilterArguments([is_string($statement) ? new Statement($statement) : $statement]);
+		return self::doFilterArguments([is_string($statement) ? new \Nette\DI\Definitions\Statement($statement) : $statement]);
 	}
 
 	/**
 	 * Removes ... recursively.
 	 *
-	 * @return array
+	 * @param array|mixed[] $args
+	 * @return \Nette\DI\Definitions\Statement[]
 	 */
-	private static function doFilterArguments(array $args)
+	private static function doFilterArguments(array $args): array
 	{
 		foreach ($args as $k => $v) {
 			if ($v === '...') {
@@ -119,13 +121,13 @@ class Helpers
 			} elseif (is_array($v)) {
 				$args[$k] = self::doFilterArguments($v);
 
-			} elseif ($v instanceof Statement) {
+			} elseif ($v instanceof \Nette\DI\Definitions\Statement) {
 				$tmp = self::doFilterArguments([$v->getEntity()]);
-				$args[$k] = new Statement($tmp[0], self::doFilterArguments($v->arguments));
+				$args[$k] = new \Nette\DI\Definitions\Statement($tmp[0], self::doFilterArguments($v->arguments));
 
 			} elseif ($v instanceof stdClass && isset($v->value, $v->attributes)) {
 				$tmp = self::doFilterArguments([$v->value]);
-				$args[$k] = new Statement($tmp[0], self::doFilterArguments(is_array($v->attributes) ? $v->attributes : [$v->attributes]));
+				$args[$k] = new \Nette\DI\Definitions\Statement($tmp[0], self::doFilterArguments(is_array($v->attributes) ? $v->attributes : [$v->attributes]));
 			}
 		}
 

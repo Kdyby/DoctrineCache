@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * Test: Kdyby\Doctrine\DI\Helpers.
  *
@@ -17,7 +19,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class CacheTest extends \Tester\TestCase
 {
 
-	public function testNonexistentKey()
+	public function testNonexistentKey(): void
 	{
 		$storage = new MemoryStorage();
 		$cache = new NetteCacheAdapter($storage, 'ns');
@@ -31,7 +33,7 @@ class CacheTest extends \Tester\TestCase
 		Assert::same('data', $cache->fetch('nonexistent-key'));
 	}
 
-	public function testStoringNull()
+	public function testStoringNull(): void
 	{
 		$storage = new MemoryStorage();
 		$cache = new NetteCacheAdapter($storage, 'ns');
@@ -42,16 +44,14 @@ class CacheTest extends \Tester\TestCase
 		Assert::false($cache->fetch('nonexistent-key'));
 	}
 
-	public function testZeroAndNullLifetime()
+	public function testZeroAndNullLifetime(): void
 	{
 		$storage = new MemoryStorage();
 		$cache = new NetteCacheAdapter($storage, 'ns');
 
 		$cache->save('foo1', 'data', 0);
-		$cache->save('foo2', 'data', NULL);
 
 		Assert::true($cache->contains('foo1'));
-		Assert::true($cache->contains('foo2'));
 	}
 
 }

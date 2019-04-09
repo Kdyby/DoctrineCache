@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the Kdyby (http://www.kdyby.org)
  *
@@ -17,7 +19,7 @@ class RedisCache extends \Doctrine\Common\Cache\RedisCache
 
 	use \Kdyby\StrictObjects\Scream;
 
-	public function __construct(Redis $redis = NULL)
+	public function __construct(?Redis $redis = NULL)
 	{
 		if ($redis !== NULL) {
 			$this->setRedis($redis);

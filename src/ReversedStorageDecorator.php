@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
  * This file is part of the Kdyby (http://www.kdyby.org)
  *
@@ -29,62 +31,39 @@ class ReversedStorageDecorator implements \Nette\Caching\IStorage
 	}
 
 	/**
-	 * Read from cache.
-	 *
-	 * @param string $key
-	 * @return mixed|NULL
+	 * {@inheritdoc}
 	 */
-	public function read($key)
+	public function read(string $key)
 	{
 		$data = $this->provider->fetch($key);
 		return $data === FALSE ? NULL : $data;
 	}
 
-	/**
-	 * Prevents item reading and writing. Lock is released by write() or remove().
-	 *
-	 * @param string $key
-	 * @return void
-	 */
-	public function lock($key)
+	public function lock(string $key): void
 	{
 		// sorry!
 	}
 
 	/**
-	 * Writes item into the cache.
-	 *
-	 * @param string $key
-	 * @param mixed $data
-	 * @param array $dependencies
-	 * @return void
+	 * {@inheritdoc}
 	 */
-	public function write($key, $data, array $dependencies)
+	public function write(string $key, $data, array $dependencies): void
 	{
 		$this->provider->save($key, $data);
 	}
 
-	/**
-	 * Removes item from the cache.
-	 *
-	 * @param string $key
-	 * @return void
-	 */
-	public function remove($key)
+	public function remove(string $key): void
 	{
 		$this->provider->delete($key);
 	}
 
 	/**
-	 * Removes items from the cache by conditions.
-	 *
-	 * @param array $conditions
-	 * @return void
+	 * {@inheritdoc}
 	 */
-	public function clean(array $conditions)
+	public function clean(array $conditions): void
 	{
 		if (!isset($conditions[NCache::ALL])) {
-			throw new \Kdyby\DoctrineCache\NotImplementedException();
+			throw new \Kdyby\DoctrineCache\Exception\NotImplementedException();
 		}
 
 		$this->provider->deleteAll();

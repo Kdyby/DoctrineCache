@@ -10,20 +10,9 @@ declare(strict_types = 1);
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace Kdyby\DoctrineCache;
+namespace Kdyby\DoctrineCache\Exception;
 
-use Memcached;
-
-class MemcachedCache extends \Doctrine\Common\Cache\MemcachedCache
+class NotImplementedException extends \LogicException implements \Kdyby\DoctrineCache\Exception\Exception
 {
-
-	use \Kdyby\StrictObjects\Scream;
-
-	public function __construct(?Memcached $memcached = NULL)
-	{
-		if ($memcached !== NULL) {
-			$this->setMemcached($memcached);
-		}
-	}
 
 }
