@@ -11,7 +11,7 @@ declare(strict_types = 1);
 namespace KdybyTests\DoctrineCache;
 
 use Kdyby\DoctrineCache\DI\Helpers as DICacheHelpers;
-use Nette\DI\Statement;
+use Nette\DI\Definitions\Statement;
 use SplFileInfo;
 use Tester\Assert;
 

@@ -14,6 +14,9 @@ namespace Kdyby\DoctrineCache;
 
 use Memcache;
 
+/**
+ * @deprecated
+ */
 class MemcacheCache extends \Doctrine\Common\Cache\MemcacheCache
 {
 
