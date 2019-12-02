@@ -102,8 +102,9 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 	 * @param string[] $files
 	 * @param int $lifeTime
 	 */
-	protected function doSaveDependingOnFiles(string $id, $data, array $files, int $lifeTime = 0): bool
+	protected function doSaveDependingOnFiles(string $id, $data, array $files, int $lifeTime = null): bool
 	{
+		$lifeTime = (int) $lifeTime;
 		$dp = [NCache::TAGS => ['doctrine'], NCache::FILES => $files];
 		if ($lifeTime > 0) {
 			$dp[NCache::EXPIRE] = time() + $lifeTime;
