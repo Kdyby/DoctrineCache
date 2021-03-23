@@ -17,7 +17,7 @@ use Redis;
 class RedisCache extends \Doctrine\Common\Cache\RedisCache
 {
 
-	use \Kdyby\StrictObjects\Scream;
+	use \Nette\SmartObject;
 
 	public function __construct(?Redis $redis = NULL)
 	{
