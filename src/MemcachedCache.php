@@ -17,7 +17,7 @@ use Memcached;
 class MemcachedCache extends \Doctrine\Common\Cache\MemcachedCache
 {
 
-	use \Kdyby\StrictObjects\Scream;
+	use \Nette\SmartObject;
 
 	public function __construct(?Memcached $memcached = NULL)
 	{

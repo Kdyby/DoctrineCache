@@ -30,7 +30,7 @@ use stdClass;
 class Helpers
 {
 
-	use \Kdyby\StrictObjects\Scream;
+	use \Nette\SmartObject;
 
 	/**
 	 * @var string[]

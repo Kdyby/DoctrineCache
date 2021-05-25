@@ -20,7 +20,7 @@ use Memcache;
 class MemcacheCache extends \Doctrine\Common\Cache\MemcacheCache
 {
 
-	use \Kdyby\StrictObjects\Scream;
+	use \Nette\SmartObject;
 
 	public function __construct(?Memcache $memcache = NULL)
 	{

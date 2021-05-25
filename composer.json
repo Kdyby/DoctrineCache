@@ -21,7 +21,7 @@
 		"doctrine/cache": "^1.8.0",
 		"nette/di": "^3.0",
 		"nette/caching": "^3.0",
-		"kdyby/strict-objects": "^2.0"
+		"nette/utils": "~3.1.0"
 	},
 	"require-dev": {
 		"doctrine/orm": "^2.6.3",

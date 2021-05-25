@@ -18,7 +18,7 @@ use Nette\Caching\Cache as NCache;
 class ReversedStorageDecorator implements \Nette\Caching\IStorage
 {
 
-	use \Kdyby\StrictObjects\Scream;
+	use \Nette\SmartObject;
 
 	/**
 	 * @var \Doctrine\Common\Cache\CacheProvider
